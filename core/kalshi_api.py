@@ -2,11 +2,11 @@
 
 PROTECTED CORE — the trading agent must not edit files under core/.
 
-Draft adapter (kalshi branch, operator 2026-10-10). Not wired in yet:
-nothing imports this module. It exposes the same functions as pmapi.py
+Kalshi adapter (kalshi branch, operator 2026-10-10). pmapi.py delegates to
+it unless PHIL_VENUE=polymarket. It exposes the same functions as pmapi.py
 (gamma_markets, gamma_market, clob_book, best_prices, market_tokens) and
 reshapes Kalshi's public trade API into the gamma/CLOB records the rest of
-core/ already reads, so scan, ledger, forecast and resolve could run on it
+core/ already reads, so scan, ledger, forecast and resolve run on it
 unchanged:
   market id      = Kalshi ticker
   outcomes       = ["Yes", "No"], token ids "<ticker>:yes" / "<ticker>:no"

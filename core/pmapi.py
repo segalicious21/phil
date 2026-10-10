@@ -1,8 +1,14 @@
 """Polymarket API helpers (read-only). Stdlib only.
 
 PROTECTED CORE — the trading agent must not edit files under core/.
+
+Venue switch (kalshi branch, operator 2026-10-10): Polymarket answers HTTP
+451 in this operator's region, so the default venue here is Kalshi and the
+market-data functions delegate to core/kalshi_api.py, which returns the same
+gamma/CLOB shapes. PHIL_VENUE=polymarket restores the original calls.
 """
 import json
+import os
 import time
 import urllib.parse
 import urllib.request
@@ -52,3 +58,23 @@ def market_tokens(market):
     outcomes = json.loads(market.get("outcomes", "[]"))
     token_ids = json.loads(market.get("clobTokenIds", "[]"))
     return dict(zip(outcomes, token_ids))
+
+
+VENUE = os.environ.get("PHIL_VENUE", "kalshi").lower()
+
+if VENUE == "kalshi":
+    # Imported last: kalshi_api takes get_json from this module. The wrappers
+    # look kalshi_api up at call time, so either module may be imported first.
+    import kalshi_api
+
+    def gamma_markets(**params):  # noqa: F811 — venue override
+        return kalshi_api.gamma_markets(**params)
+
+    def gamma_market(market_id):  # noqa: F811
+        return kalshi_api.gamma_market(market_id)
+
+    def clob_book(token_id):  # noqa: F811
+        return kalshi_api.clob_book(token_id)
+
+    def best_prices(token_id):  # noqa: F811
+        return kalshi_api.best_prices(token_id)
