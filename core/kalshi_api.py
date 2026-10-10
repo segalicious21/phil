@@ -18,7 +18,11 @@ unchanged:
   book           = Kalshi lists bids only; a Yes ask is 1 - best No bid
 Gamma query params are emulated: closed, end_date_min/max, order, ascending,
 volume_num_min, liquidity_num_min, limit, offset. tag_id / related_tags have
-no Kalshi equivalent and return no markets. Multivariate combo markets are
+no Kalshi equivalent and return no markets. series_ticker (a Kalshi series,
+or a comma-separated list or Python list of them) is passed through to
+Kalshi; it is the way to reach a category, since the unfiltered universe is
+over 40k open markets, about 70% sports, and is capped at MAX_UNIVERSE.
+Multivariate combo markets are
 excluded. Numeric (Polymarket) market ids raise at once, so resolve.py would
 leave the archived Polymarket rows alone instead of querying Kalshi for them.
 """
@@ -27,6 +31,7 @@ import json
 
 from pmapi import get_json
 
+VENUE = "kalshi"  # strategy/discovery.py reads this off the pmapi module
 KALSHI = "https://api.elections.kalshi.com/trade-api/v2"
 MAX_UNIVERSE = 3000  # markets paged per distinct query window
 CLOSE_SLACK = dt.timedelta(days=14)  # close_time may trail the event
@@ -94,12 +99,15 @@ def to_gamma(k):
     }
 
 
-def _universe(status, min_end, max_end):
-    """Every market in a close-time window, paged by cursor and cached."""
-    key = (status, min_end, max_end)
+def _universe(status, min_end, max_end, series=None):
+    """Every market in a close-time window (optionally one series), paged by
+    cursor and cached."""
+    key = (status, min_end, max_end, series)
     if key in _universe_cache:
         return _universe_cache[key]
     params = {"status": status, "limit": 1000, "mve_filter": "exclude"}
+    if series:
+        params["series_ticker"] = series
     if min_end:
         params["min_close_ts"] = int(min_end.timestamp())
     if max_end:
@@ -120,7 +128,15 @@ def gamma_markets(**params):
         return []
     closed = str(params.get("closed", "false")).lower() == "true"
     min_end, max_end = _ts(params.get("end_date_min")), _ts(params.get("end_date_max"))
-    rows = _universe("settled" if closed else "open", min_end, max_end)
+    status = "settled" if closed else "open"
+    series = params.get("series_ticker")
+    if series:
+        if isinstance(series, str):
+            series = series.split(",")
+        rows = [m for s in series if s.strip()
+                for m in _universe(status, min_end, max_end, s.strip())]
+    else:
+        rows = _universe(status, min_end, max_end)
     vol_min = _num(params.get("volume_num_min")) or 0
     liq_min = _num(params.get("liquidity_num_min")) or 0
     picked = []

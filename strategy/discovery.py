@@ -20,13 +20,59 @@ core's default query (loudly), so a bug degrades sensing but never blinds me.
 Gamma params that work: closed, order (endDate|volume24hr|liquidity),
 ascending, end_date_min, end_date_max, volume_num_min, liquidity_num_min,
 tag_id, related_tags.
+
+Venue (kalshi branch, operator 2026-10-10): when core/kalshi_api.py stands in
+for pmapi, scan's pmapi module carries VENUE = "kalshi" and kalshi_queries()
+runs instead. Kalshi has no tags; a category is reached by naming its series
+(series_ticker). Volume and liquidity floors there count contracts ($1
+notional each) and open interest, not USD.
 """
+import datetime
+import sys
+
+# Kalshi series that resolve on an official print, verified live 2026-10-10
+# (each had open markets; KXPCE and KXPPI do not exist on Kalshi). This is
+# the Kalshi counterpart of the Polymarket econ tag below: BLS CPI family,
+# the Fed decision, payrolls, unemployment, GDP, core PCE, jobless claims.
+KALSHI_ECON_SERIES = ["KXCPI", "KXCPIYOY", "KXCPICORE", "KXCPICOREYOY",
+                      "KXFED", "KXFEDDECISION", "KXPAYROLLS", "KXU3", "KXGDP",
+                      "KXPCECORE", "KXJOBLESSCLAIMS"]
+# Exchange-settled price brackets (ICE / Pyth). Thin books: the spread cap in
+# strategy/policy.py does the filtering, so no volume floor here either.
+KALSHI_COMMODITY_SERIES = ["KXWTI", "KXWTIW", "KXBRENTW", "KXGOLDW"]
+
+
+def venue():
+    return getattr(sys.modules.get("pmapi"), "VENUE", "polymarket")
+
+
+def kalshi_queries(now, min_end, horizon, iso, base):
+    today_end = min(horizon, now.replace(microsecond=0) + datetime.timedelta(hours=36))
+    return [
+        # 1-3 mirror the Polymarket lanes on Kalshi's unfiltered universe,
+        # which is mostly sports and capped by core/kalshi_api.MAX_UNIVERSE.
+        {**base, "_label": "kalshi-liquid-multiday", "order": "endDate",
+         "ascending": "true", "volume_num_min": 50000},
+        {**base, "_label": "kalshi-by-open-interest", "order": "liquidity",
+         "ascending": "false", "liquidity_num_min": 20000},
+        {"closed": "false", "_label": "kalshi-active-today", "order": "volume24hr",
+         "ascending": "false", "end_date_min": iso(min_end),
+         "end_date_max": iso(today_end)},
+        # 4-5 reach categories by series, without a volume floor, for the same
+        # reason as the Polymarket econ tag: mechanically resolving beats deep.
+        {**base, "_label": "kalshi-econ-series", "order": "volume24hr",
+         "ascending": "false", "series_ticker": ",".join(KALSHI_ECON_SERIES)},
+        {**base, "_label": "kalshi-commodity-series", "order": "volume24hr",
+         "ascending": "false", "series_ticker": ",".join(KALSHI_COMMODITY_SERIES)},
+    ]
 
 
 def queries(now, min_end, horizon, args, protected):
     iso = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
     base = {"closed": "false", "end_date_min": iso(min_end),
             "end_date_max": iso(horizon)}
+    if venue() == "kalshi":
+        return kalshi_queries(now, min_end, horizon, iso, base)
 
     return [
         # 1. Well-covered events out to the horizon. The lifetime-volume floor
