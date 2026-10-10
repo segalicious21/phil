@@ -61,11 +61,27 @@ resolution, a walk-forward calibration shrinkage toward the market mid
 MIN_PRICE 0.30/0.45/0.50, MAX_PRICE 0.95, MIN_EDGE 0.015/0.025, MAX_EDGE
 0.08/0.10, spread cap 0.02, requiring fit_score, preferring the No side
 when both qualify.
+
+v4 (2026-10-10): MIN_EDGE 0.02 -> 0.03 and MIN_PRICE 0.10 -> 0.15.
+On 1392 settled rows v3 scored +0.099 (5 folds) / +0.141 (10 folds) but
+-0.025 on the forward test after its own rule date (--after
+2026-09-03T00:00:00Z, 953 rows), so its in-sample +0.743 did not hold.
+v4 scores +0.159 / +0.153 / forward +0.131 (pnl +71.35 on 61 bets), and
++0.159 / +0.171 without the Bank of Israel rows (v3: +0.005 / +0.060).
+Chosen from the middle of a plateau, not the peak: every MIN_EDGE in
+0.025..0.035 crossed with MIN_PRICE 0.15..0.20 beats v3 on all three
+tests (forward +0.115..+0.199). The peak (0.035 / 0.20, forward +0.199)
+bets only 47 times. Caveat: the forward rows were visible while choosing,
+so v4 is not out-of-sample either; the next true test is rows settled
+after 2026-10-10. Rejected single changes this round (worse on at least
+one test): MIN_EDGE 0.01/0.015, MAX_EDGE 0.05/0.06/0.08/0.10, spread cap
+0.02/0.05, MIN_PRICE 0.05, MAX_PRICE 0.95, dead zone 0.20-0.40/0.15-0.45/
+0.20-0.50. Spread cap 0.04, MAX_PRICE 0.85 and no dead zone were mixed.
 """
 
-MIN_EDGE = 0.02
+MIN_EDGE = 0.03
 MAX_EDGE = 0.07
-MIN_PRICE = 0.10
+MIN_PRICE = 0.15
 MAX_PRICE = 0.90
 DEAD_ZONE = (0.20, 0.45)  # never buy a token priced in [lo, hi)
 MAX_SPREAD = 0.03
