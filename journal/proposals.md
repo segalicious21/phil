@@ -4148,3 +4148,24 @@ whichever one you pick.
   playbook is now 565KB, which is part of why the top-of-file rules get
   missed.
 - **P2 (runner quota split): still PROPOSED, low urgency.**
+
+## 2026-10-10 15:5xZ - Kalshi venue: screener and runner gaps (FULL, operator)
+
+- **K1 (screen.py placeholder-book cut).** On the first agent Kalshi cycle,
+  10 of 15 escalations were UFC method/distance props, darts R32 matches
+  and a virtual eBasketball game, all on books with bid-ask 0.3-0.6
+  (e.g. KXDARTSMATCH-...LHUMKDOE-LHUM 0.07/0.66, 43 contracts traded).
+  Haiku's divergence there is measured against a meaningless mid, so
+  escalation slots get spent on markets that can never pass max_spread.
+  Kalshi has many such freshly listed books; Polymarket's AMM-seeded
+  books rarely looked like this. strategy/screener-filters.json only
+  supports title regexes, so I cannot cut on spread. Ask: a
+  `max_spread_at_prepare` key in screen.py prepare (say 0.15),
+  counted under dropped_by_reason like the other filters.
+  Status: PROPOSED.
+- **K2 (operator runner tooling).** On this runner, `ODDS_API_KEY` is
+  not provisioned (core/odds.py exits), and this session's permission
+  settings require approval for `python3 strategy/tools/*.py` (kalshi.py,
+  reconcile.py), so the playbook's mandatory reconcile check could not
+  run. Ask: provision the odds key and allow strategy/tools scripts on
+  the operator runner. Status: PROPOSED.

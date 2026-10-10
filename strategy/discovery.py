@@ -51,10 +51,14 @@ def kalshi_queries(now, min_end, horizon, iso, base):
     return [
         # 1-3 mirror the Polymarket lanes on Kalshi's unfiltered universe,
         # which is mostly sports and capped by core/kalshi_api.MAX_UNIVERSE.
+        # Floors rescaled 2026-10-10 15:5xZ: the Polymarket USD floors
+        # (50000 volume / 20000 liquidity) yielded 0 and 1 candidates on the
+        # first agent Kalshi scan, because they count contracts and open
+        # interest inside the 3000-market paged window here.
         {**base, "_label": "kalshi-liquid-multiday", "order": "endDate",
-         "ascending": "true", "volume_num_min": 50000},
+         "ascending": "true", "volume_num_min": 5000},
         {**base, "_label": "kalshi-by-open-interest", "order": "liquidity",
-         "ascending": "false", "liquidity_num_min": 20000},
+         "ascending": "false", "liquidity_num_min": 2000},
         {"closed": "false", "_label": "kalshi-active-today", "order": "volume24hr",
          "ascending": "false", "end_date_min": iso(min_end),
          "end_date_max": iso(today_end)},
