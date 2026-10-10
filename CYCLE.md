@@ -36,6 +36,41 @@ every candidate sits in one bucket, a whole research channel fails, or a
 category never appears, say so there. Cycle logs record symptoms; proposals
 get causes fixed.
 
+## Venue: Kalshi (kalshi branch, operator 2026-10-10)
+
+Polymarket answers HTTP 451 in this operator's region, so on this branch every
+market comes from Kalshi's public API. `core/pmapi.py` delegates to
+`core/kalshi_api.py` (unless `PHIL_VENUE=polymarket` is set), which reshapes
+Kalshi records into the same fields the rest of core/ reads. What that means
+for you:
+
+- A market id is a Kalshi ticker (e.g. `KXCPI-26SEP-T0.5`); its series is
+  the part before the first `-`. Every market is binary: pass
+  `--outcome "Yes"` or `--outcome "No"` to forecast.py and ledger.py.
+- Prices are dollars per $1 contract. Kalshi books show bids only, so a Yes
+  fill is `1 - best No bid` and a No fill is `1 - best Yes bid`; the ledger
+  already fills at those asks.
+- Resolution is Kalshi's settlement, under the market's own rules: the
+  `description` scan returns is Kalshi's `rules_primary`. Research the
+  resolution source those rules name (BLS, ICE, NOAA, the league), not the
+  title. `end_date` is Kalshi's expected expiration where it gives one;
+  sports markets can close days after the game.
+- Volume and liquidity are in contracts, and liquidity is open interest, so
+  floors in `strategy/discovery.py` and lessons in the playbook that cite
+  Polymarket dollar volumes do not transfer one for one.
+- Kalshi has no tags. Categories are reached by naming series in
+  `strategy/discovery.py` (the econ and commodity lanes). The unfiltered
+  universe is over 40k open markets, about 70% sports, and only the first
+  3000 are paged, so a category you want must have its own series lane.
+- The journal still holds Polymarket rows (numeric market ids): 3 open bets
+  and about 250 open forecasts. resolve.py cannot fetch them here and prints
+  `fetch failed ... is a Polymarket id` for each, and score.py shows `MTM
+  unavailable` for the bets. That is expected, not a fault to diagnose or
+  work around; mention it once in the cycle log if at all. Grade Kalshi
+  work on rows whose market id is a ticker.
+- No real trading on this venue: `REAL.md` and `core/real.py` are
+  Polymarket-only. Never place or propose a real twin here.
+
 ## Tick types
 
 Every invocation runs as one of three ticks:
@@ -46,7 +81,8 @@ Every invocation runs as one of three ticks:
 - **TRIGGERED**: invoked by the watch routine when `core/watch.py check`
   reported `trigger: true` this session. Skip step 0b's pacing and step 4's
   broad scan: the candidate set is the verdict's `context` array (plus at most
-  one narrow gamma fetch when the trigger is a new market). Every other step
+  one narrow market fetch through `core/pmapi.py` when the trigger is a new
+  market). Every other step
   runs normally, scoped to those candidates. Before placing any bet, check the
   ledger for an existing open position on the same market - a duplicate inside
   the hour means the watcher double-fired: log it, do not re-bet. Triggered
@@ -170,7 +206,9 @@ Every invocation runs as one of three ticks:
    log that and skip; never scrape around it.
 5a. **Mech second opinion** (only when the `mcp__pearl-connect__mech_*`
    tools are present in this session - operator-machine runs with the Pearl
-   Connect signer up; cloud cycles skip this step entirely): for candidates
+   Connect signer up; cloud cycles skip this step entirely. On the Kalshi
+   venue skip it too, even if the tools are present: the request context
+   below is built for Polymarket ids and `type` "polymarket"): for candidates
    you researched to a concrete estimate, buy an independent prediction from
    the Olas mech marketplace (~$0.01 USDC per request, paid from the service
    safe). The point is comparison: over time, learn which mech tools are
