@@ -14,7 +14,11 @@ procedure exactly once, then stop. Work from this directory.
 - You may edit anything under `strategy/`, and write to `journal/retros/` and
   `reports/`. Only `core/ledger.py` and `core/resolve.py` write the ledger;
   only `core/forecast.py` and `core/resolve.py` write `journal/forecasts.jsonl`;
-  only `core/lease.py` writes `journal/lease.json`.
+  only `core/lease.py` writes `journal/lease.json`. `loop.sh` runs
+  `core/screener_archive.py` before each cycle: once a month it moves the
+  old head of `journal/screener.jsonl` into `journal/screener-archive/`
+  (gzip, byte for byte). Commit that diff with the cycle; core readers see
+  archive plus live, so never "restore" the moved rows.
 - Every probability estimate you record must be your honest belief — your
   calibration is measured (`core/score.py`), and gaming it destroys the
   experiment's value.

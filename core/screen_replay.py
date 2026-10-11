@@ -233,6 +233,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import pmapi  # noqa: E402
 import resolve  # noqa: E402
 import screen  # noqa: E402
+import screener_archive  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SCREENER = ROOT / "journal" / "screener.jsonl"
@@ -317,9 +318,11 @@ def parse_arg_ts(value, flag):
 
 
 def load_screener_rows():
-    if not SCREENER.is_file():
+    # Archived months (journal/screener-archive/) then the live file, in the
+    # original append order - see core/screener_archive.py.
+    if not screener_archive.exists():
         sys.exit(f"no screener log at {SCREENER.relative_to(ROOT)}")
-    return resolve.load_jsonl(SCREENER)
+    return screener_archive.load_rows()
 
 
 def load_outcome_cache():

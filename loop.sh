@@ -96,6 +96,14 @@ for i in $(seq 1 "$CYCLES"); do
     continue
   fi
 
+  # Screener journal rotation (operator, 2026-10-11): once a month, move the
+  # pre-month head of journal/screener.jsonl into a gzip archive so the file
+  # stays under GitHub's 100 MB push limit. A no-op until the month turns;
+  # the cycle's own `git add -A` commits the result. A failure here never
+  # blocks the cycle. core/screener_archive.py has the details.
+  python3 core/screener_archive.py >&2 \
+    || echo "WARNING: screener_archive failed - journal left as it was" >&2
+
   # Model per tick (operator, 2026-09-23): Opus 5.5 for any tick that may run
   # FULL or TRIGGERED, Sonnet 5 for a tick CYCLE.md step 0/0b will run LIGHT.
   # Pinned because an unpinned `claude -p` takes the account-level default,

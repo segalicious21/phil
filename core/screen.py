@@ -38,7 +38,8 @@ Two things this deliberately does NOT do:
     triage guesses, not honest researched beliefs; letting them near the
     forecast ledger would corrupt brier_delta and violate CYCLE.md's
     "never invent an estimate" rule. Screener output lives only in
-    journal/screener.jsonl, which nothing else writes.
+    journal/screener.jsonl, which nothing else writes (past months move,
+    unchanged, to journal/screener-archive/ via core/screener_archive.py).
   * It never places, sizes or vetoes anything. It emits a reading list.
 
 Divergence caveat: `outcome_prices` come from gamma's market record - they are

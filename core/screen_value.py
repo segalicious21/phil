@@ -98,6 +98,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import counterfactual  # noqa: E402  (protected sibling: fill model, folds)
 import replay  # noqa: E402  (protected sibling: loaders, ts parsing)
 import screen_replay  # noqa: E402  (protected sibling: clustering, SEs)
+import screener_archive  # noqa: E402  (archived months + live journal)
 
 ROOT = replay.ROOT
 VALUE_FILE = ROOT / "strategy" / "screener-value.json"
@@ -271,15 +272,14 @@ def first_screened():
     """
     first = {}
     try:
-        with open(SCREENER) as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                r = json.loads(line)
-                mid, ts = str(r.get("market_id")), r.get("ts")
-                if ts and (mid not in first or ts < first[mid]):
-                    first[mid] = ts
+        for line in screener_archive.iter_lines():
+            line = line.strip()
+            if not line:
+                continue
+            r = json.loads(line)
+            mid, ts = str(r.get("market_id")), r.get("ts")
+            if ts and (mid not in first or ts < first[mid]):
+                first[mid] = ts
     except OSError as e:
         print(f"screen_value: journal/screener.jsonl unreadable ({e}); no "
               f"market-age feature", file=sys.stderr)
@@ -605,13 +605,12 @@ def screener_runs():
     the cycle actually researches from, not the per-batch cut.
     """
     runs = {}
-    with open(SCREENER) as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            r = json.loads(line)
-            runs.setdefault(r["ts"], []).append(r)
+    for line in screener_archive.iter_lines():
+        line = line.strip()
+        if not line:
+            continue
+        r = json.loads(line)
+        runs.setdefault(r["ts"], []).append(r)
     return dict(sorted(runs.items()))
 
 
