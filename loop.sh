@@ -153,9 +153,25 @@ PY
   # step 9 and its rebase path mandate exactly these commands, and a
   # permission-blocked "checkout -B" strands the cycle's commits on a
   # detached HEAD (2026-08-28).
+  #
+  # strategy/tools (operator, 2026-10-11, proposals K2): that folder is
+  # agent-editable, so "Bash(python3 strategy/tools/*)" on this machine would
+  # run any code the session writes there, and this PC holds other projects'
+  # API keys. Only the two tools the playbook needs that touch no network are
+  # allowed (reconcile.py reads the journal, devig.py is arithmetic); the
+  # session may not edit them (an Edit(path) deny covers every file-editing
+  # tool), and they are reverted after the cycle like the protected paths.
+  # The other tools stay unrunnable here.
+  LOCKED_TOOLS=(strategy/tools/reconcile.py strategy/tools/devig.py)
+  DISALLOWED=()
+  for t in "${LOCKED_TOOLS[@]}"; do
+    DISALLOWED+=("Edit(./$t)")
+  done
   CMD=(claude -p "$PROMPT" --model "$MODEL"
        --allowedTools "Read" "Glob" "Grep" "WebSearch" "WebFetch"
          "Edit" "Write" "Task"
+         "Bash(python3 strategy/tools/reconcile.py:*)"
+         "Bash(python3 strategy/tools/devig.py:*)"
          "Bash(python3 core/*)" "Bash(git add:*)" "Bash(git commit:*)"
          "Bash(git rev-parse:*)" "Bash(git log:*)" "Bash(git diff:*)"
          "Bash(git status:*)" "Bash(git symbolic-ref:*)"
@@ -173,10 +189,10 @@ PY
           "mcp__pearl-connect__mech_tools"
           "mcp__pearl-connect__mech_request"
           "mcp__pearl-connect__mech_result"
-          --mcp-config "$STORE/.mcp.json"
-          --disallowedTools "Read($STORE/.mcp.json)")
+          --mcp-config "$STORE/.mcp.json")
+    DISALLOWED+=("Read($STORE/.mcp.json)")
   fi
-  CMD+=(--permission-mode acceptEdits)
+  CMD+=(--disallowedTools "${DISALLOWED[@]}" --permission-mode acceptEdits)
 
   # PHIL_PUSH_BY_LOOP tells CYCLE.md step 9 to commit but not push — the push
   # happens below, in this shell. GIT_TERMINAL_PROMPT/GIT_ASKPASS make any
@@ -188,7 +204,8 @@ PY
     "${CMD[@]}" || echo "cycle $i failed; continuing"
 
   # Enforce the protected boundary: revert any agent edits to core/config.
-  PROTECTED_PATHS=(core/ config/ .github/ CYCLE.md REAL.md loop.sh CLAUDE.md LICENSE README.md .gitignore)
+  PROTECTED_PATHS=(core/ config/ .github/ CYCLE.md REAL.md loop.sh CLAUDE.md LICENSE README.md .gitignore
+                   "${LOCKED_TOOLS[@]}")
   if ! git diff --quiet HEAD -- "${PROTECTED_PATHS[@]}"; then
     echo "WARNING: agent touched protected files — reverting" >&2
     git checkout -- "${PROTECTED_PATHS[@]}"

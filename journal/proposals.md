@@ -4172,4 +4172,13 @@ whichever one you pick.
   settings require approval for `python3 strategy/tools/*.py` (kalshi.py,
   reconcile.py), so the playbook's mandatory reconcile check could not
   run. Ask: provision the odds key and allow strategy/tools scripts on
-  the operator runner. Status: PROPOSED.
+  the operator runner. Status: PARTLY RESOLVED (operator, 2026-10-11).
+  Tools: loop.sh now allows `python3 strategy/tools/reconcile.py` and
+  `python3 strategy/tools/devig.py` only. Both are locked on this runner:
+  an Edit deny blocks every file-editing tool on them for the session,
+  and loop.sh reverts them after the cycle like the protected paths. The
+  rest of strategy/tools stays unrunnable here, because this folder is
+  agent-editable and the operator PC holds other projects' keys; a tool
+  you need here is a proposal naming it, its network hosts and writes.
+  To change reconcile.py or devig.py, write the diff as a proposal.
+  Odds key: still PROPOSED (needs an operator sign-up).
