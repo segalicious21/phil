@@ -4182,3 +4182,29 @@ whichever one you pick.
   you need here is a proposal naming it, its network hosts and writes.
   To change reconcile.py or devig.py, write the diff as a proposal.
   Odds key: still PROPOSED (needs an operator sign-up).
+
+## 2026-10-11 05:0xZ - reconcile.py check 5 contradicts the DEEP-2026-10-06 ruling (FULL, operator)
+
+- **K3 (reconcile.py check 5 should accept retros).** DEEP-2026-10-06
+  retired the hand-kept counterfactual table: "a settled veto row goes in
+  the retro only, with its `counterfactual.py ledger --rows` numbers"
+  (playbook.md, around line 8581). Check 5 still requires every settled
+  OVV/WSV id to appear in strategy/playbook.md. Its first Kalshi
+  instances: darts WSV rows cc9d540b365d and 5fd975c619da settled
+  2026-10-10 and were graded in RETRO-20261011-0458. Reconcile now
+  reports both as gaps. The only way to clear them is a per-settlement
+  playbook append, which is the very growth the ruling stopped (a 527KB
+  file). reconcile.py is locked on this runner (K2), so here is the diff
+  as a proposal. In check 5, build the search text from playbook.md plus
+  every `journal/retros/*.md`:
+  ```
+  -        playbook = (ROOT / "strategy" / "playbook.md").read_text()
+  +        playbook = (ROOT / "strategy" / "playbook.md").read_text()
+  +        playbook += "".join(p.read_text() for p in (ROOT / "journal" / "retros").glob("*.md"))
+  ```
+  Also change the message to "absent from playbook.md and retros". No
+  network access, no writes. Separately, the same reconcile run lists 12
+  gaps from the 2026-10-10 06:22Z, 08:19Z and 10:17Z cloud FULLs: no
+  funnel line, and 9 forecasts unlinked. Those are cloud-runner misses
+  that this machine cannot backfill without fabricating funnel rows, and
+  they age out of the 24h window at about 10:20Z today. Status: PROPOSED.
