@@ -40,7 +40,9 @@ Checks, over a trailing window (default 24h):
      wide-spread-veto and settled_ts >= 2026-08-23 (when DEEP-2026-08-23
      made the same-commit counterfactual-table extension a rule) must have
      its id appear somewhere in strategy/playbook.md — either as a table
-     row or as a documented exclusion. The prose rule was violated three
+     row or as a documented exclusion. Since DEEP-2026-10-06 retired the
+     hand table, a mention in any journal/retros/*.md also counts (K3,
+     operator 2026-10-11). The prose rule was violated three
      times on 2026-08-26 alone (Crowley 7dac557c4c19 at 07:28Z, the three
      PCE MoM rows at 15:21Z, the BoK pair at 04:13Z next day — the last
      logged as "veto-correct" when the vetoed read had in fact WON its
@@ -195,6 +197,14 @@ def main():
         playbook = (ROOT / "strategy" / "playbook.md").read_text()
     except OSError:
         playbook = ""
+    # DEEP-2026-10-06 retired the hand table: a settled veto row now goes in
+    # its retro only, so a retro mention satisfies the check (K3, operator
+    # 2026-10-11).
+    for retro in sorted((ROOT / "journal" / "retros").glob("*.md")):
+        try:
+            playbook += retro.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
     latest = {}
     for row in forecasts:
         rid = str(row.get("id", ""))
@@ -211,8 +221,8 @@ def main():
             table_gaps.append(
                 f"settled {row.get('skip_reason')} row {rid} "
                 f"({row.get('settled_ts')} {row.get('category')}) absent from "
-                f"playbook.md counterfactual ledger (add the row or a "
-                f"documented exclusion)"
+                f"playbook.md and journal/retros (grade it in the retro with "
+                f"its counterfactual.py ledger --rows numbers)"
             )
 
     # Check 6: FULL-cycle funnel-line presence (see module docstring).

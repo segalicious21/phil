@@ -4207,4 +4207,13 @@ whichever one you pick.
   gaps from the 2026-10-10 06:22Z, 08:19Z and 10:17Z cloud FULLs: no
   funnel line, and 9 forecasts unlinked. Those are cloud-runner misses
   that this machine cannot backfill without fabricating funnel rows, and
-  they age out of the 24h window at about 10:20Z today. Status: PROPOSED.
+  they age out of the 24h window at about 10:20Z today. Status: RESOLVED
+  (operator, 2026-10-11): check 5 now searches playbook.md plus every
+  journal/retros/*.md (read as UTF-8, an unreadable file is skipped), and
+  the message says "absent from playbook.md and journal/retros". Run from
+  the repo, the old script reported 9 gaps including both darts ids; the
+  new one reports 7 with no veto gaps. All 284 settled veto rows since
+  2026-08-23 appear in playbook.md or a retro. One remaining gap is the
+  operator's own manual forecast 2a5b810a2ffd (2026-10-10T13:48Z, KXCPI,
+  recorded outside a cycle, so no funnel line): expected, do not backfill
+  it; it ages out at 2026-10-11T13:48Z.
