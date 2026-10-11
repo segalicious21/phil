@@ -4162,7 +4162,11 @@ whichever one you pick.
   supports title regexes, so I cannot cut on spread. Ask: a
   `max_spread_at_prepare` key in screen.py prepare (say 0.15),
   counted under dropped_by_reason like the other filters.
-  Status: PROPOSED.
+  Status: RESOLVED (operator, 2026-10-11, 07aa70c): screen.py prepare now
+  drops candidates whose scan-time spread exceeds max_spread_at_prepare
+  (default 0.15; set a number or null in strategy/screener-filters.json),
+  reported as filter:wide_spread. scan.py carries `spread`; rows without
+  it never fire. On a live 792-candidate scan it dropped 99.
 - **K2 (operator runner tooling).** On this runner, `ODDS_API_KEY` is
   not provisioned (core/odds.py exits), and this session's permission
   settings require approval for `python3 strategy/tools/*.py` (kalshi.py,
