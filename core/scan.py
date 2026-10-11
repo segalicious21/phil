@@ -73,6 +73,17 @@ def discovery_queries(args, min_end, horizon):
         return default_queries(args, min_end, horizon)
 
 
+def spread_of(m):
+    try:
+        if m.get("spread") is not None:
+            return round(float(m["spread"]), 4)
+        if m.get("bestBid") is not None and m.get("bestAsk") is not None:
+            return round(float(m["bestAsk"]) - float(m["bestBid"]), 4)
+    except (TypeError, ValueError):
+        pass
+    return None
+
+
 def keep(m, seen, banned, args):
     """Protected admissibility filter. Returns the output record or None."""
     q = m.get("question") or ""
@@ -104,6 +115,10 @@ def keep(m, seen, banned, args):
         "clob_token_ids": json.loads(m.get("clobTokenIds", "[]")),
         "volume_24h": float(m.get("volume24hr") or 0),
         "liquidity": float(m.get("liquidityNum") or 0),
+        # Top-of-book spread at scan time (gamma's spread, else bestAsk -
+        # bestBid; None when the record carries neither). Read by screen.py
+        # prepare's max_spread_at_prepare filter (operator 2026-10-11, K1).
+        "spread": spread_of(m),
         "slug": m.get("slug"),
         "description": (m.get("description") or "")[:500],
     }

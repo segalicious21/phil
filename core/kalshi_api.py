@@ -91,6 +91,11 @@ def to_gamma(k):
         "outcomes": json.dumps(["Yes", "No"]),
         "outcomePrices": json.dumps([f"{yes:.4f}", f"{1 - yes:.4f}"]),
         "clobTokenIds": json.dumps([f"{ticker}:yes", f"{ticker}:no"]),
+        # Yes-side top of book, named as gamma names it, so scan.py can carry
+        # the spread to screen.py's prepare filter. An empty bid side reads 0.
+        "bestBid": bid,
+        "bestAsk": ask,
+        "spread": round(ask - bid, 4) if bid is not None and ask is not None else None,
         "volume24hr": _num(k.get("volume_24h_fp")) or 0.0,
         "volumeNum": _num(k.get("volume_fp")) or 0.0,
         "liquidityNum": _num(k.get("open_interest_fp")) or 0.0,

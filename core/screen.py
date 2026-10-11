@@ -76,6 +76,14 @@ to tune; a broken file degrades to no title filters and says so on stderr.
 Every filter reports its count in the header's dropped_by_reason as
 `filter:<name>`, so the footprint of each rule stays public.
 
+wide_spread (operator, 2026-10-11, proposals K1): a candidate whose scan-time
+top-of-book spread exceeds `max_spread_at_prepare` (default 0.15; null in the
+filter file turns it off) is dropped. On the first Kalshi cycle 10 of 15
+escalations sat on freshly listed books with bid-ask 0.3-0.6, where a Haiku
+divergence is measured against a meaningless mid and the market can never
+pass the betting spread cap anyway. A candidate without a `spread` field
+(older scans, replays of journal/screener.jsonl) never fires this filter.
+
 Quota: the day's cost is counted in BATCHES, not dollars, under
 journal/screener-quota/<runner>.json - one file per runner, committed, so
 subagent load is public and survives container churn. Two runners (the cloud
@@ -117,7 +125,7 @@ WORK_ROOT = ROOT / "reports" / "screener-work"
 # Deterministic pre-filter defaults; strategy/screener-filters.json overrides
 # them within these types. See load_filters.
 FILTER_DEFAULTS = {"exclude_mids_exactly_half": True, "min_outcomes": 2,
-                   "max_outcomes": 2}
+                   "max_outcomes": 2, "max_spread_at_prepare": 0.15}
 HALF_EPS = 1e-9
 
 SCREENER_DEFAULTS = {"batch_size": 20, "top_n": 15, "max_batches_per_day": 150,
@@ -357,6 +365,16 @@ def load_filters():
         elif got is not None:
             print(f"screen: screener-filters.json {key} = {got!r} is not an "
                   f"integer >= 2; keeping {spec[key]}", file=sys.stderr)
+    if "max_spread_at_prepare" in raw:
+        got = raw["max_spread_at_prepare"]
+        if got is None:
+            spec["max_spread_at_prepare"] = None
+        elif isinstance(got, (int, float)) and not isinstance(got, bool) and 0 < got <= 1:
+            spec["max_spread_at_prepare"] = float(got)
+        else:
+            print(f"screen: screener-filters.json max_spread_at_prepare = "
+                  f"{got!r} is not null or a number in (0, 1]; keeping "
+                  f"{spec['max_spread_at_prepare']}", file=sys.stderr)
     compiled = []
     pats = raw.get("exclude_title_patterns")
     if pats is None:
@@ -399,6 +417,11 @@ def filters_fired(candidate, mids, compiled, spec):
     if spec["exclude_mids_exactly_half"] and mids \
             and all(abs(v - 0.5) <= HALF_EPS for v in mids.values()):
         fired.append("mids_exactly_half")
+    # A row without a spread (older scans, screener.jsonl replays) never fires.
+    cap, spread = spec.get("max_spread_at_prepare"), candidate.get("spread")
+    if cap is not None and isinstance(spread, (int, float)) \
+            and not isinstance(spread, bool) and round(spread, 4) > cap:
+        fired.append("wide_spread")
     return fired
 
 
