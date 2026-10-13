@@ -23,3 +23,12 @@ Wordmark: Spectral SC 600, tracking 0.1em.
 
 Two pines; the person standing between them is drawn as the letter B.
 Files: `final-sentinel-b-light-bg.svg`, `final-sentinel-b-dark-bg.svg`.
+
+## Business card (print)
+
+`print/braveholt-card-print.pdf`: 2 pages (front, back), US 3.5 x 2 in trim plus 0.125 in bleed
+(3.75 x 2.25 in page), CMYK vector, fonts embedded. `print/braveholt-card-proof.pdf` adds trim
+(dashed grey) and safe-area (dashed cyan) guides; do not send the proof to the printer.
+Regenerate with `python3 card.py` (needs reportlab and the Spectral SC / Spectral / IBM Plex Mono TTFs in `fonts/`).
+Placeholders [Name], [Title], [email], [Phone] must be filled before printing.
+CMYK: pine green 60/30/55/80, bone 0/1/5/5, paper 0/1/3/3, brass on dark 0/23/64/15, brass on light 0/27/75/28.
