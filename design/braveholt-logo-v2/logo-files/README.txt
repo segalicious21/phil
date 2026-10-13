@@ -1,8 +1,11 @@
 BRAVEHOLT LOGO FILES
 
-svg/   Vector files. Use these whenever possible (web, print, signage). Text is converted to outlines,
-       so no font is needed.
-png/   Transparent PNGs. Number in the file name = width (lockups) or height (mark) in pixels.
+pdf/   Vector, CMYK. Send these to printers and designers; opens directly in Adobe Illustrator.
+eps/   Vector, CMYK. For sign makers, embroidery and older print workflows.
+svg/   Vector, RGB. For websites and digital use. Text is converted to outlines, so no font is needed.
+png/   Raster, transparent background. Office documents, slides, email signatures.
+webp/  Raster, transparent background, smaller files for websites.
+       Number in PNG/WebP file names = width (lockups) or height (mark) in pixels.
 favicon.ico   Website tab icon (16, 32, 48 px).
 
 WHICH FILE
