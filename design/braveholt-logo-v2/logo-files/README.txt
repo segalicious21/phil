@@ -1,5 +1,7 @@
 BRAVEHOLT LOGO FILES
 
+ai/    Vector, CMYK, PDF-compatible Illustrator files. Open in Adobe Illustrator.
+       To get a fully native .ai, open the file in Illustrator and Save As .ai.
 pdf/   Vector, CMYK. Send these to printers and designers; opens directly in Adobe Illustrator.
 eps/   Vector, CMYK. For sign makers, embroidery and older print workflows.
 svg/   Vector, RGB. For websites and digital use. Text is converted to outlines, so no font is needed.
