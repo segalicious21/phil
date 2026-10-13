@@ -18,3 +18,8 @@ Wordmark type in the canvas: Archivo 700, width 125, tracking 0.12em.
 A person stands on the ground; the shadow below is a pine.
 "One stands. A forest grows." Files: `final-shadow-light-bg.svg`, `final-shadow-dark-bg.svg`.
 Wordmark: Spectral SC 600, tracking 0.1em.
+
+## Alternative final: Sentinel B
+
+Two pines; the person standing between them is drawn as the letter B.
+Files: `final-sentinel-b-light-bg.svg`, `final-sentinel-b-dark-bg.svg`.
