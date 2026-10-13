@@ -26,7 +26,9 @@
    - IBM Plex Sans KR (body)
    - IBM Plex Mono (labels, data)
 5. **Voice.** Steady, Plain, Exact. Do not use SDVOSB, veteran-owned, 8(a),
-   "certified", "official", or government insignia until confirmed.
+   "certified", "official", or government insignia until confirmed. Name the agency as "Department of War
+   (Department of Defense)", or "War Dept. (DoD)" when short, and link sources
+   to war.gov.
 6. **Website copy map.** Each piece of site copy by layer, with what to do if
    the business changes.
 7. **Business-change checklist.**

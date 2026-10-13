@@ -36,7 +36,7 @@
 7. **Next 30 days.**
    - Fix the niche and its NAICS codes
    - Choose an email service and add a privacy notice
-   - Build the first pipeline (needs defense.gov allowed on the network)
+   - Build the first pipeline (needs war.gov and api.usaspending.gov allowed on the network)
    - Run a 4-week trial
    - Consult an attorney
 
