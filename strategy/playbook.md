@@ -8946,3 +8946,18 @@ next postcount settlement where the counter and the book disagree.
   1a394ea666f9 (0.96 vs mid 0.512, -0.237), was recorded against a
   0.035/0.989 book with $21 of liquidity. The mid is meaningless there.
   Do not count it as skill.
+
+## RETRO-20261016-1330 ruling: CPI ladders, don't shade on the nowcast alone
+
+Sep CPI (core MoM 0.33 vs Cleveland nowcast 0.20; headline 0.6) settled
+4 independent Kalshi legs Yes. On 4 of them I sat 0.015-0.055 below the
+mid on the nowcast and lost Brier every time (+0.026 to +0.049). T0.4,
++0.01 above the mid, was a wash. Add the Aug cluster (book's shape beat
+mine on 3 of 4 families, RETRO-20260911-1615) and the ladder has beaten
+my nowcast-anchored adjustment on 7 of 8 families over two prints.
+Recording rule (n<15, not a category bar): **when the Cleveland nowcast
+is the only reason to sit away from a liquid (OI > ~10k) CPI ladder,
+record within 0.02 of the mid.** A lean beyond that needs a named
+component the nowcast does not carry (AAA gasoline, Manheim, a bank
+tracker with a published number), and the note must cite it. Re-grade at
+the Oct CPI print.
