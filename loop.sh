@@ -32,8 +32,23 @@ done
 CYCLES="${ARGS[0]:-1}"
 SLEEP_MIN="${ARGS[1]:-45}"
 
+# Nothing in this repo belongs in .claude/ or .mcp.json: a project or local
+# settings file there is loaded by `claude -p` and widens the allowlist below
+# (operator, 2026-10-16). It is untracked, so the post-cycle revert misses it.
+# Checked before every tick and again before the push; a hit stops the loop
+# for a human to look, it never deletes what may be the operator's own file.
+stray_settings() {
+  if [ -e .mcp.json ] || [ -n "$(ls -A .claude 2>/dev/null)" ]; then
+    echo "ERROR: unexpected .claude/ or .mcp.json in this checkout - review and remove it before cycling:" >&2
+    ls -lA .claude .mcp.json 2>/dev/null >&2 || true
+    return 0
+  fi
+  return 1
+}
+
 for i in $(seq 1 "$CYCLES"); do
   echo "=== cycle $i/$CYCLES $(date -u +%FT%TZ) ==="
+  stray_settings && exit 1
 
   # With HEAD detached, `git push origin main` pushes the stale local branch
   # ref and reports success - the cycle's commits never reach the remote
@@ -147,10 +162,12 @@ PY
   echo "model: $MODEL ($MODEL_WHY)" >&2
 
   PROMPT="$(cat CYCLE.md)"
+  REAL_ON=0
   if [ "$REAL_MODE" -eq 1 ]; then
     if [ "$PEARL_UP" -eq 1 ] \
        && python3 core/real.py doctor 2>/dev/null | grep -q '"ready": true'; then
       PROMPT="$(cat CYCLE.md REAL.md)"
+      REAL_ON=1
     else
       echo "WARNING: --real requested but Pearl Connect signer not ready — running paper-only cycle" >&2
     fi
@@ -179,9 +196,18 @@ PY
   # would widen this allowlist for the next cycle; the user-level settings
   # and .mcp.json denies close the same door one level up.
   DISALLOWED=("PowerShell" "Edit(./.claude/**)" "Edit(~/.claude/**)" "Edit(./.mcp.json)")
-  for t in "${LOCKED_TOOLS[@]}"; do
-    DISALLOWED+=("Edit(./$t)")
+  # Allowlist audit (operator, 2026-10-16). Every protected path is also
+  # Edit-denied, not just reverted afterwards: a session that can rewrite
+  # core/score.py and then run it has the K2 hole back. .git/ is denied too,
+  # since a hook or config line there runs on the next allowed git command.
+  # `git log`/`git diff --output=<file>` writes any file without a file tool
+  # (git takes no abbreviation of it; checked on 2.55).
+  PROTECTED_PATHS=(core/ config/ .github/ CYCLE.md REAL.md loop.sh CLAUDE.md LICENSE README.md .gitignore
+                   "${LOCKED_TOOLS[@]}")
+  for p in "${PROTECTED_PATHS[@]}" .git/; do
+    case "$p" in */) DISALLOWED+=("Edit(./$p**)") ;; *) DISALLOWED+=("Edit(./$p)") ;; esac
   done
+  DISALLOWED+=("Bash(git log*--output*)" "Bash(git diff*--output*)")
   # The session has no allowed way to read its environment; state the two
   # flags CYCLE.md steps 0 and 9 ask about, both set on the claude call below
   # (this point is only reached after the lease was acquired above).
@@ -193,15 +219,28 @@ Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for t
          "Edit" "Write" "Task"
          "Bash(python3 strategy/tools/reconcile.py:*)"
          "Bash(python3 strategy/tools/devig.py:*)"
-         "Bash(python3 core/*)" "Bash(git add:*)" "Bash(git commit:*)"
+         "Bash(git add:*)" "Bash(git commit:*)"
          "Bash(git rev-parse:*)" "Bash(git log:*)" "Bash(git diff:*)"
          "Bash(git status:*)" "Bash(git symbolic-ref:*)"
          "Bash(git merge-base:*)" "Bash(git rev-list:*)"
-         "Bash(git fetch:*)" "Bash(git checkout -B main origin/main)"
+         "Bash(git fetch origin main)" "Bash(git fetch --unshallow origin)"
+         "Bash(git fetch --deepen=1000 origin)"
+         "Bash(git checkout -B main origin/main)"
          "Bash(git checkout -B main HEAD)"
          "Bash(git rebase --continue)" "Bash(git rebase --abort)"
          "Bash(git rebase --quit)"
-         "Bash(git pull:*)")
+         "Bash(git pull --rebase origin main)")
+  # One rule per core script, never "core/*": that glob also matched
+  # core/../strategy/x.py and core/real.py. These are the scripts CYCLE.md
+  # and the playbook call; lease.py stays with this shell (PHIL_LEASE), and
+  # real.py is reachable only on a tick that loaded REAL.md.
+  for s in ci resolve score scan screen odds mechlog forecast ledger validate \
+           counterfactual screen_replay replay; do
+    CMD+=("Bash(python3 core/$s.py:*)")
+  done
+  if [ "$REAL_ON" -eq 1 ]; then
+    CMD+=("Bash(python3 core/real.py settle)" "Bash(python3 core/real.py place:*)")
+  fi
   if [ "$PEARL_UP" -eq 1 ]; then
     # wallet_info is read-only; the mech_* tools buy predictions from the
     # Olas mech marketplace (~$0.01 USDC each, paid by the service safe) per
@@ -225,8 +264,6 @@ Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for t
     "${CMD[@]}" || echo "cycle $i failed; continuing"
 
   # Enforce the protected boundary: revert any agent edits to core/config.
-  PROTECTED_PATHS=(core/ config/ .github/ CYCLE.md REAL.md loop.sh CLAUDE.md LICENSE README.md .gitignore
-                   "${LOCKED_TOOLS[@]}")
   if ! git diff --quiet HEAD -- "${PROTECTED_PATHS[@]}"; then
     echo "WARNING: agent touched protected files — reverting" >&2
     git checkout -- "${PROTECTED_PATHS[@]}"
@@ -234,6 +271,11 @@ Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for t
   PROTECTED_IN_LAST_COMMITS=$(git log --oneline -5 --name-only | grep -cE '^(core/|config/|\.github/|CYCLE\.md|REAL\.md|loop\.sh|CLAUDE\.md|LICENSE|README\.md|\.gitignore)' || true)
   if [ "$PROTECTED_IN_LAST_COMMITS" -gt 0 ]; then
     echo "WARNING: protected files appear in recent commits — review manually" >&2
+  fi
+
+  if stray_settings; then
+    PHIL_PUSH_BY_LOOP=1 python3 core/lease.py release >/dev/null || true
+    exit 1
   fi
 
   # Push from this shell, not from the agent. The credential helper is
