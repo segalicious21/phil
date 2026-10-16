@@ -24,6 +24,16 @@ if [ -z "${PEARL_CONNECT_STORE:-}" ]; then
   echo "NOTE: PEARL_CONNECT_STORE is unset — this loop runs without the Pearl Connect tools (no mech second opinions, no real twins)" >&2
 fi
 
+# No git hooks (operator, 2026-10-16): code the session runs can write
+# .git/hooks/*, and this shell's push, rebase and checkout would then run it
+# outside claude's allowlist. The repo ships no hooks; CI is the guard.
+# core.fsmonitor names a command too, so it is pinned off the same way.
+export GIT_CONFIG_COUNT=2 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=/dev/null \
+  GIT_CONFIG_KEY_1=core.fsmonitor GIT_CONFIG_VALUE_1=false
+# Python run by this shell uses -I, so a json.py the session leaves in the
+# repo root or a user-site .pth is never imported; -I also drops PYTHONUTF8,
+# hence -X utf8 (without it the cp949 locale breaks core scripts on Windows).
+
 REAL_MODE=0
 ARGS=()
 for a in "$@"; do
@@ -105,7 +115,7 @@ for i in $(seq 1 "$CYCLES"); do
   # holds it, or it could not be written) the whole tick is skipped, not run
   # LIGHT: a LIGHT tick still commits settled rows next to the holder's
   # cycle, and that is how main forks. lease.py's docstring has the why.
-  if ! LEASE="$(PHIL_PUSH_BY_LOOP=1 python3 core/lease.py acquire)"; then
+  if ! LEASE="$(PHIL_PUSH_BY_LOOP=1 python3 -I -X utf8 core/lease.py acquire)"; then
     echo "WARNING: runner lease not taken - skipping this tick: $LEASE" >&2
     [ "$i" -lt "$CYCLES" ] && sleep $((SLEEP_MIN * 60))
     continue
@@ -116,7 +126,7 @@ for i in $(seq 1 "$CYCLES"); do
   # stays under GitHub's 100 MB push limit. A no-op until the month turns;
   # the cycle's own `git add -A` commits the result. A failure here never
   # blocks the cycle. core/screener_archive.py has the details.
-  python3 core/screener_archive.py >&2 \
+  python3 -I -X utf8 core/screener_archive.py >&2 \
     || echo "WARNING: screener_archive failed - journal left as it was" >&2
 
   # Model per tick (operator, 2026-09-23): Opus 5.5 for any tick that may run
@@ -131,7 +141,7 @@ for i in $(seq 1 "$CYCLES"); do
   # would flip it, and the error would go the wrong way.
   MODEL=claude-opus-5-5
   MODEL_WHY="tick may run FULL"
-  if python3 - <<'PY'
+  if python3 -I -X utf8 - <<'PY'
 import datetime as dt, json, re, sys
 now = dt.datetime.now(dt.timezone.utc)
 iso = lambda t: dt.datetime.fromisoformat(t.replace("Z", "+00:00"))
@@ -165,7 +175,7 @@ PY
   REAL_ON=0
   if [ "$REAL_MODE" -eq 1 ]; then
     if [ "$PEARL_UP" -eq 1 ] \
-       && python3 core/real.py doctor 2>/dev/null | grep -q '"ready": true'; then
+       && python3 -I -X utf8 core/real.py doctor 2>/dev/null | grep -q '"ready": true'; then
       PROMPT="$(cat CYCLE.md REAL.md)"
       REAL_ON=1
     else
@@ -259,22 +269,46 @@ Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for t
   # stray credential lookup fail fast instead of hanging on a keyring prompt
   # no headless session can answer; GIT_EDITOR stops `git rebase --continue`
   # from opening an editor and blocking forever.
+  #
+  # Paper ticks run without PEARL_CONNECT_STORE (operator, 2026-10-16):
+  # core/scan.py and core/replay.py import agent-editable strategy/ code, and
+  # core/real.py finds the signer only through that variable, so without it
+  # strategy code cannot reach real funds on a paper tick. --mcp-config above
+  # still names the store for the mech tools.
+  # .git/config and .gitattributes can name commands (filter drivers,
+  # sshCommand, credential helpers) that this shell's git calls would run;
+  # a change during the tick stops the loop below for a human to look.
+  GITCFG_SUM="$(cat .git/config .gitattributes 2>/dev/null | cksum)"
+  RUN_ENV=()
+  [ "$REAL_ON" -eq 1 ] || RUN_ENV=(env -u PEARL_CONNECT_STORE -u CONNECT_POLYMARKET_VENV)
   PHIL_PUSH_BY_LOOP=1 PHIL_LEASE=acquired \
   GIT_TERMINAL_PROMPT=0 GIT_ASKPASS=/usr/bin/true GIT_EDITOR=true \
-    "${CMD[@]}" || echo "cycle $i failed; continuing"
+    ${RUN_ENV[@]+"${RUN_ENV[@]}"} "${CMD[@]}" || echo "cycle $i failed; continuing"
 
   # Enforce the protected boundary: revert any agent edits to core/config.
   if ! git diff --quiet HEAD -- "${PROTECTED_PATHS[@]}"; then
     echo "WARNING: agent touched protected files — reverting" >&2
     git checkout -- "${PROTECTED_PATHS[@]}"
   fi
+  # An untracked core/<name>.py (e.g. json.py) shadows the stdlib for every
+  # core script, lease.py below included; the checkout above never sees it.
+  # __pycache__ is kept: a .pyc there is never imported without its source.
+  if [ -n "$(git clean -ndx -e __pycache__ -- core/)" ]; then
+    echo "WARNING: untracked files in core/ - removing:" >&2
+    git clean -fdx -e __pycache__ -- core/ >&2
+  fi
   PROTECTED_IN_LAST_COMMITS=$(git log --oneline -5 --name-only | grep -cE '^(core/|config/|\.github/|CYCLE\.md|REAL\.md|loop\.sh|CLAUDE\.md|LICENSE|README\.md|\.gitignore)' || true)
   if [ "$PROTECTED_IN_LAST_COMMITS" -gt 0 ]; then
     echo "WARNING: protected files appear in recent commits — review manually" >&2
   fi
 
+  if [ "$(cat .git/config .gitattributes 2>/dev/null | cksum)" != "$GITCFG_SUM" ]; then
+    echo "ERROR: .git/config or .gitattributes changed during the cycle - review before pushing" >&2
+    PHIL_PUSH_BY_LOOP=1 python3 -I -X utf8 core/lease.py release >/dev/null || true
+    exit 1
+  fi
   if stray_settings; then
-    PHIL_PUSH_BY_LOOP=1 python3 core/lease.py release >/dev/null || true
+    PHIL_PUSH_BY_LOOP=1 python3 -I -X utf8 core/lease.py release >/dev/null || true
     exit 1
   fi
 
@@ -305,7 +339,7 @@ Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for t
 
   # Release the runner lease after the push, even a failed one: the tick is
   # over either way, and release commits onto origin/main, not onto HEAD.
-  PHIL_PUSH_BY_LOOP=1 python3 core/lease.py release >/dev/null \
+  PHIL_PUSH_BY_LOOP=1 python3 -I -X utf8 core/lease.py release >/dev/null \
     || echo "WARNING: could not release the runner lease - it expires on its own" >&2
 
   [ "$i" -lt "$CYCLES" ] && sleep $((SLEEP_MIN * 60))
