@@ -14,3 +14,8 @@ subagent-template.txt
 
 # loop.sh single-instance guard
 .loop.pid
+
+# Secret files never go to GitHub (operator, 2026-10-17, 보안팀 장부 5)
+.env
+.env.*
+!.env.example
