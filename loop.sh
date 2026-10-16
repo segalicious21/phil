@@ -171,10 +171,23 @@ PY
   # tool), and they are reverted after the cycle like the protected paths.
   # The other tools stay unrunnable here.
   LOCKED_TOOLS=(strategy/tools/reconcile.py strategy/tools/devig.py)
-  DISALLOWED=()
+  # PowerShell (operator, 2026-10-16): on Windows the session also gets a
+  # PowerShell tool billed as the primary shell, and every rule below is
+  # Bash(...), so git fetch and $env: reads went there and needed approval
+  # no headless session can give (cycles.log 2026-10-11). Bash only. The
+  # .claude/ deny stops the session writing a project settings file that
+  # would widen this allowlist for the next cycle; the user-level settings
+  # and .mcp.json denies close the same door one level up.
+  DISALLOWED=("PowerShell" "Edit(./.claude/**)" "Edit(~/.claude/**)" "Edit(./.mcp.json)")
   for t in "${LOCKED_TOOLS[@]}"; do
     DISALLOWED+=("Edit(./$t)")
   done
+  # The session has no allowed way to read its environment; state the two
+  # flags CYCLE.md steps 0 and 9 ask about, both set on the claude call below
+  # (this point is only reached after the lease was acquired above).
+  PROMPT="$PROMPT
+
+Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for this session. Do not read the environment to check them."
   CMD=(claude -p "$PROMPT" --model "$MODEL"
        --allowedTools "Read" "Glob" "Grep" "WebSearch" "WebFetch"
          "Edit" "Write" "Task"
