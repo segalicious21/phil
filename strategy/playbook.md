@@ -8961,3 +8961,22 @@ record within 0.02 of the mid.** A lean beyond that needs a named
 component the nowcast does not carry (AAA gasoline, Manheim, a bank
 tracker with a published number), and the note must cite it. Re-grade at
 the Oct CPI print.
+
+## RETRO-20261017-0125 tally: Kalshi commodity close ladders (WTI daily, Brent weekly)
+
+Kalshi close-above ladders on oil (`KXWTI-*`, `KXBRENTW-*`) are one
+decision per event (one distribution, one vol input). Settled so far:
+- WTI Oct 13 daily (`2fe75b119555`, `9ebf97642e5f`, lognormal ~2.8%/day):
+  market closer, row dBrier sum +0.072 (RETRO-20261016-1330).
+- Brent Oct 16 weekly (`e6b537f13c69` T105.99 own 0.31 vs mid 0.23,
+  `a9600e135dc7` T101.99 own 0.62 vs mid 0.48; centre ~103.5, sd ~5
+  unsourced): both Yes, own closer, row dBrier sum -0.243.
+Tally: 2 decisions, 1-1. The Brent win came from centring on the higher of
+two conflicting Friday closes (Yahoo/Investing Dec 104.72) while the
+ladder centred ~102; the 10-16 17:25Z cycle saw the same shape (ICE Dec
+~109.3 vs ladder ~106). Kalshi's Brent rules name no contract, so the gap
+may be contract choice, not mispricing. **Ruling:** stays
+`unvalidated-method`, forecast-only. Every row's note must name the
+reference contract and price it centred on, and the vol source (an
+unsourced sd is allowed but must say so). Re-grade at 5 decisions; a
+bettable class needs own closer on at least 4 of 5 with a sourced vol.
