@@ -8980,3 +8980,17 @@ may be contract choice, not mispricing. **Ruling:** stays
 reference contract and price it centred on, and the vol source (an
 unsourced sd is allowed but must say so). Re-grade at 5 decisions; a
 bettable class needs own closer on at least 4 of 5 with a sourced vol.
+
+**Reference-gap finding (2026-10-18 08:34Z FULL):** `KXWTI-*` daily rules
+name the contract (Oct 19 event: "December 2026 contract"). Headline
+"WTI closed 101.41" on Oct 16 was front-month CLX6; CLZ6 traded ~99.0, and
+the ladder centred ~98.65. That ~$2.4 gap was the Nov-Dec spread, not
+mispricing. The Brent gaps flagged 10-16 17:25Z and 10-18 06:07Z
+(cd1419996b20, settle 109.86 vs ladder ~106.5) are the same shape in a
+backwardated curve, so treat them as a probable contract mismatch until
+proven otherwise. **Rule:** read the rules' contract month first and
+centre on that contract's quote. Never centre on a headline front-month
+close. If the rules name no contract, an unexplained gap to the ladder
+of about one calendar spread is a reason to sit at the ladder, not
+against it. The 10-16 Brent "own closer" win (above) may have come from
+this mismatch working in my favour; don't count it as method skill.
