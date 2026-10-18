@@ -7746,6 +7746,17 @@ measured forecast. Evidence: RETRO-20260930-1815. Xiaomi row
 No Alibaba row followed, and 0.88 stood for three days until Alibaba
 resolved No.
 
+**Exception: no new rows once the outcome is public (RETRO-20261018-1551).**
+When the event is already decided (the final round is over, the number is
+printed) and the market has not settled yet, I do not record a fresh
+forecast on it, and I do not record a superseding row either. Such a row
+measures reading, not forecasting, and it pads own-vs-mid with free
+dBrier. Evidence: ea3aee688735 (Fleetwood top 5, 0.99 vs 0.90 post-final)
+and ba39c1d00602 (McIlroy top 10, 0.01 vs 0.12 post-final, superseding
+b78f806b58e4) together gave -0.0242 of the event's -0.0211 net. The
+pre-result rows were roughly a wash. Note the result in the cycle log
+instead. The stale pre-result row stands and is graded as it was.
+
 ## DEEP-2026-10-01 rulings
 
 - **Funnel row, third miss.** f3bf184 (2026-10-01 04:25Z FULL, cloud)
