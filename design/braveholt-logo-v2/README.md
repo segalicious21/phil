@@ -27,6 +27,11 @@ Two pines; the person standing between them is drawn as the letter B, cut out as
 - A new `app-icon-small` (16–48 px, with a thicker brass line) is used for favicon.ico.
 - The minimum mark size is 24 px / 8 mm.
 
+**Second pass, same day** (founder: "B의 가독성, 골드 밑선의 정밀함, 전체 비율과 간격"):
+- The B's waist is deeper and its top bowl is narrower.
+- The brass line spans exactly the foliage (11.5–51.2) and sits 0.8 units below the trunks.
+- In the horizontal lockup, the wordmark stands on the trunk baseline with cap height = hidden B height.
+
 Geometry source: `print/mark.json`.
 
 Earlier explorations are kept for the record and are not in use:

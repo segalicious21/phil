@@ -44,7 +44,7 @@ def mark(c, cx, top, size, fg, ground, hole):
     c.setFillColor(hole)  # the B is the ground showing through
     sc = lambda px, py: (32.6 + (px-32.6)*0.85, 56 + (py-56)*0.85)
     draw_path(c, G['B'], ox, oy, s, sc)
-    c.setFillColor(ground); c.rect(ox + 8*s, oy - 58*s, 48*s, 2*s, fill=1, stroke=0)
+    c.setFillColor(ground); c.rect(ox + 11.5*s, oy - 58.8*s, 39.7*s, 2*s, fill=1, stroke=0)  # ground line = foliage width, 0.8 below the trunks
 def spaced(c, x, y, text, font, size, tracking, align='left'):
     w = sum(pdfmetrics.stringWidth(ch, font, size) for ch in text) + tracking*size*(len(text)-1)
     if align == 'center': x -= w/2
