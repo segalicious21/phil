@@ -32,6 +32,14 @@ Two pines; the person standing between them is drawn as the letter B, cut out as
 - The brass line spans exactly the foliage (11.5–51.2) and sits 0.8 units below the trunks.
 - In the horizontal lockup, the wordmark stands on the trunk baseline with cap height = hidden B height.
 
+**Third pass, v4 structure, same day** (founder: "나무와 B의 결합 · 좌우 균형과 하단 골드 선 · 작은 크기에서의 가독성"):
+- The B's top and waist sit on the trees' tier lines.
+- Both trees share their lower tier line.
+- The trunk stubs are equal.
+- The ground line has a 1.6 gap.
+- A new step-free `mark-small` covers 16–24 px.
+- The horizontal wordmark's cap top sits on the shared tier line.
+
 Geometry source: `print/mark.json`.
 
 Earlier explorations are kept for the record and are not in use:

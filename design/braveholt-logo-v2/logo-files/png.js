@@ -9,6 +9,7 @@ const fs = require('fs'); const path = require('path');
     const vb = svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number); const ar = vb[2] / vb[3];
     let sizes;
     if (f.includes('app-icon-small')) sizes = [[48, 48], [32, 32], [16, 16]];
+    else if (f.includes('mark-small')) sizes = [[Math.round(24 * ar), 24], [Math.round(16 * ar), 16]];
     else if (f.includes('app-icon')) sizes = [[1024, 1024], [512, 512], [180, 180]];
     else if (f.includes('mark')) sizes = [[Math.round(1024 * ar), 1024], [Math.round(256 * ar), 256]];
     else if (f.includes('horizontal')) sizes = [[2400, Math.round(2400 / ar)], [800, Math.round(800 / ar)]];

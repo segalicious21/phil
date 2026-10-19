@@ -16,6 +16,7 @@ WHICH FILE
   logo-stacked-*          Symbol above BRAVEHOLT. For square spaces, signage, social profiles.
   app-icon                Symbol on pine green square. App icons, social avatars (180 px and up).
   app-icon-small          16-48 px version: larger symbol, thicker brass line. Used for favicon.ico.
+  mark-small-*            16-24 px symbol without tier steps (labels, document headers). Use instead of mark-* below 24 px.
 
 WHICH COLOR
   color-on-light   Pine green + brass, for white or light backgrounds
@@ -31,5 +32,5 @@ COLORS
 
 RULES
   Keep clear space around the logo of at least 1/4 of the mark height on every side.
-  Minimum size: mark 24 px tall on screen / 8 mm in print; horizontal logo 120 px wide / 30 mm.
+  Minimum size: mark 24 px tall on screen / 8 mm in print (below that use mark-small); horizontal logo 120 px wide / 30 mm.
   Do not stretch, rotate, recolor outside the palette, or add effects (shadows, outlines, gradients).
