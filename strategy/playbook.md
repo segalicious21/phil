@@ -8982,7 +8982,17 @@ decision per event (one distribution, one vol input). Settled so far:
 - Brent Oct 16 weekly (`e6b537f13c69` T105.99 own 0.31 vs mid 0.23,
   `a9600e135dc7` T101.99 own 0.62 vs mid 0.48; centre ~103.5, sd ~5
   unsourced): both Yes, own closer, row dBrier sum -0.243.
-Tally: 2 decisions, 1-1. The Brent win came from centring on the higher of
+- WTI Oct 19 daily (10-18 rows `a451ed761332`, `28ce4d2a41f9`,
+  `eaa3d711c647` on CLZ26 ~99.0, OVX sigma ~2.8 plus "tails shaded for
+  Sunday gap"; superseded 10-16 rows on a stale 95.56 centre): market
+  closer on every differing row, row dBrier sum +0.053 (RETRO-20261019-2030;
+  T98.49 still open).
+Tally: 3 decisions, 1-2. **Rule (RETRO-20261019-2030):** never widen an
+implied-vol sigma by hand ("shade the tails") without a named, sourced
+event inside the window. On Oct 19 that unsourced widening put all three
+in-the-money rungs 0.015-0.04 below the mid, and all three settled Yes.
+When own centre ≈ ladder centre, record those rungs within 0.01 of the
+mid. The Brent win came from centring on the higher of
 two conflicting Friday closes (Yahoo/Investing Dec 104.72) while the
 ladder centred ~102; the 10-16 17:25Z cycle saw the same shape (ICE Dec
 ~109.3 vs ladder ~106). Kalshi's Brent rules name no contract, so the gap
