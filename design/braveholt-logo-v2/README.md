@@ -39,6 +39,7 @@ Two pines; the person standing between them is drawn as the letter B, cut out as
 - The ground line has a 1.6 gap.
 - A new step-free `mark-small` covers 16–24 px.
 - The horizontal wordmark's cap top sits on the shared tier line.
+- Then, at the founder's request, the B went back to the 85% size they chose earlier. The tier lines were moved to fit it (y 21 / 27.8 / 39).
 
 Geometry source: `print/mark.json`.
 

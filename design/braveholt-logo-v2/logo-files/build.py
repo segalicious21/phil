@@ -72,7 +72,7 @@ def svg_mark(fill, acc, pad=2.5):
 def svg_lockup(fill, acc, wfill, kind):
     # Mark: foliage x 11.5..51.2, top 3.5, ground (trunk base) y 56, brass line 56.8..58.8.
     if kind == 'horizontal':
-        cap = 56 - 37; s = cap/capH; gap = 12  # cap top = the tier line both trees share and the B waist (y37)           # gap = 1/4 of mark height (clear-space unit)
+        cap = 56 - 39; s = cap/capH; gap = 12  # cap top = the tier line both trees share and the B waist (y39)           # gap = 1/4 of mark height (clear-space unit)
         wx = 51.2 + gap; wy = 56                        # wordmark stands on the same ground as the trees and the B
         W = wx + WM_W*s + 2.5; vb = f'9 1 {W-9:.3f} 61.1'
         wm = f'<path fill="{wfill}" transform="translate({wx:.3f} {wy:.3f}) scale({s:.6f})" d="{WM_D}"/>'
