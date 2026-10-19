@@ -8,13 +8,14 @@ svg/   Vector, RGB. For websites and digital use. Text is converted to outlines,
 png/   Raster, transparent background. Office documents, slides, email signatures.
 webp/  Raster, transparent background, smaller files for websites.
        Number in PNG/WebP file names = width (lockups) or height (mark) in pixels.
-favicon.ico   Website tab icon (16, 32, 48 px).
+favicon.ico   Website tab icon (16, 32, 48 px), built from app-icon-small.
 
 WHICH FILE
   mark-*                  Symbol only (two pines, the B between them, brass ground line)
   logo-horizontal-*       Symbol + BRAVEHOLT side by side. Default for website headers, documents.
   logo-stacked-*          Symbol above BRAVEHOLT. For square spaces, signage, social profiles.
-  app-icon                Symbol on pine green square. App icons, social avatars, favicon.
+  app-icon                Symbol on pine green square. App icons, social avatars (180 px and up).
+  app-icon-small          16-48 px version: larger symbol, thicker brass line. Used for favicon.ico.
 
 WHICH COLOR
   color-on-light   Pine green + brass, for white or light backgrounds
@@ -29,6 +30,6 @@ COLORS
   Wordmark typeface: Spectral SC SemiBold, letter-spacing 0.1em
 
 RULES
-  Keep clear space around the logo at least the height of the B.
+  Keep clear space around the logo of at least 1/4 of the mark height on every side.
   Minimum size: mark 24 px tall on screen / 8 mm in print; horizontal logo 120 px wide / 30 mm.
   Do not stretch, rotate, recolor outside the palette, or add effects (shadows, outlines, gradients).

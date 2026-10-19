@@ -96,5 +96,11 @@ for name, (f, a, w) in COLORS.items():
     files[f'braveholt-logo-horizontal-{name}.svg'] = svg_lockup(f, a, w, 'horizontal')
     files[f'braveholt-logo-stacked-{name}.svg'] = svg_lockup(f, a, w, 'stacked')
 files['braveholt-app-icon.svg'] = svg_icon()
+def svg_icon_small(bg='#17241D', fill='#F1EEE6', acc='#D9A84E'):
+    # 16-48 px: mark larger in the square and a 3.5-unit ground line so it stays visible at 16 px
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
+            f'<rect width="64" height="64" fill="{bg}"/>'
+            f'<g transform="translate(32 32) scale(0.9) translate(-32 -31.5)"><path fill="{fill}" fill-rule="evenodd" d="{MARK}"/><path fill="{acc}" d="M8 56 H56 V59.5 H8Z"/></g></svg>\n')
+files['braveholt-app-icon-small.svg'] = svg_icon_small()
 for n, s in files.items(): open('out/svg/' + n, 'w').write(s)
 print(len(files), 'svgs')

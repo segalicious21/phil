@@ -3,7 +3,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.colors import CMYKColor
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-G = json.load(open('mark.json'))
+G = json.load(open('../sent/b2.json'))
 pdfmetrics.registerFont(TTFont('SpectralSC', 'fonts/SpectralSC-SemiBold.ttf'))
 pdfmetrics.registerFont(TTFont('Spectral', 'fonts/Spectral-SemiBold.ttf'))
 pdfmetrics.registerFont(TTFont('PlexMono', 'fonts/IBMPlexMono-Regular.ttf'))
