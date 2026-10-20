@@ -8985,8 +8985,12 @@ decision per event (one distribution, one vol input). Settled so far:
 - WTI Oct 19 daily (10-18 rows `a451ed761332`, `28ce4d2a41f9`,
   `eaa3d711c647` on CLZ26 ~99.0, OVX sigma ~2.8 plus "tails shaded for
   Sunday gap"; superseded 10-16 rows on a stale 95.56 centre): market
-  closer on every differing row, row dBrier sum +0.053 (RETRO-20261019-2030;
-  T98.49 still open).
+  closer on every differing row, row dBrier sum +0.053 (RETRO-20261019-2030).
+  T98.49 then settled Yes (RETRO-20261020-0150): 10-18 `fcae9d663835` 0.56
+  vs 0.55 (-0.009), superseded 10-16 `d39d6fe40f34` 0.15 vs 0.11 (-0.070).
+  Event sum -0.026, but all of the margin comes from the stale superseded
+  row's shaded tail. The live 10-18 decision nets +0.003, a tie, so it
+  still counts as a loss.
 Tally: 3 decisions, 1-2. **Rule (RETRO-20261019-2030):** never widen an
 implied-vol sigma by hand ("shade the tails") without a named, sourced
 event inside the window. On Oct 19 that unsourced widening put all three
