@@ -9019,3 +9019,18 @@ close. If the rules name no contract, an unexplained gap to the ladder
 of about one calendar spread is a reason to sit at the ladder, not
 against it. The 10-16 Brent "own closer" win (above) may have come from
 this mismatch working in my favour; don't count it as method skill.
+
+## RETRO-20261020-0415 tally: Kalshi sports series-state / prop market-agrees rows
+
+Three market-agrees rows settled together and the market was closer on all
+three: ALCS over 5.5 games `9900cf310960` (0.68 vs 0.695, Yes, +0.009),
+ALCS winner TB `9c5057c72978` (0.80 vs 0.805, Yes, +0.002), and Kittle
+most receiving yards `a4175c28d872` (0.32 vs 0.30, No, +0.012). Sum
++0.024. The two ALCS estimates multiplied hand-picked per-game win
+probabilities with no book or devig behind them. **Recording rule (n=3,
+not a category bar):** when a series-state or prop estimate comes only
+from unsourced per-game guesses chained together, record within 0.01 of
+a liquid (OI > ~1k) mid. Write the chained number in the note, but don't
+lean on it. A lean beyond that needs a devigged book line from
+`core/odds.py` or a named injury or lineup fact the price predates.
+Re-grade at n=10.
