@@ -27,7 +27,6 @@ runs instead. Kalshi has no tags; a category is reached by naming its series
 (series_ticker). Volume and liquidity floors there count contracts ($1
 notional each) and open interest, not USD.
 """
-import datetime
 import sys
 
 # Kalshi series that resolve on an official print, verified live 2026-10-10
@@ -37,9 +36,10 @@ import sys
 KALSHI_ECON_SERIES = ["KXCPI", "KXCPIYOY", "KXCPICORE", "KXCPICOREYOY",
                       "KXFED", "KXFEDDECISION", "KXPAYROLLS", "KXU3", "KXGDP",
                       "KXPCECORE", "KXJOBLESSCLAIMS"]
-# Exchange-settled price brackets (ICE / Pyth). Thin books: the spread cap in
-# strategy/policy.py does the filtering, so no volume floor here either.
-KALSHI_COMMODITY_SERIES = ["KXWTI", "KXWTIW", "KXBRENTW", "KXGOLDW"]
+# US stock index brackets (S&P 500, Nasdaq-100, Dow; daily and year-end),
+# verified live 2026-10-22 (KXRUT, KXVIX, KXDJIU had no open markets).
+KALSHI_INDEX_SERIES = ["KXINX", "KXINXU", "KXINXY", "KXNASDAQ100", "KXNASDAQ100U",
+                       "KXNASDAQ100Y", "KXDJI"]
 
 
 def venue():
@@ -47,27 +47,16 @@ def venue():
 
 
 def kalshi_queries(now, min_end, horizon, iso, base):
-    today_end = min(horizon, now.replace(microsecond=0) + datetime.timedelta(hours=36))
+    # Operator 2026-10-22: stock-market only — index brackets plus the macro
+    # prints that move stocks. The unfiltered-universe lanes (mostly sports)
+    # and commodities are dropped, so phil's forecasts can later feed the
+    # stock signal research. Series lanes have no volume floor: mechanically
+    # resolving beats deep.
     return [
-        # 1-3 mirror the Polymarket lanes on Kalshi's unfiltered universe,
-        # which is mostly sports and capped by core/kalshi_api.MAX_UNIVERSE.
-        # Floors rescaled 2026-10-10 15:5xZ: the Polymarket USD floors
-        # (50000 volume / 20000 liquidity) yielded 0 and 1 candidates on the
-        # first agent Kalshi scan, because they count contracts and open
-        # interest inside the 3000-market paged window here.
-        {**base, "_label": "kalshi-liquid-multiday", "order": "endDate",
-         "ascending": "true", "volume_num_min": 5000},
-        {**base, "_label": "kalshi-by-open-interest", "order": "liquidity",
-         "ascending": "false", "liquidity_num_min": 2000},
-        {"closed": "false", "_label": "kalshi-active-today", "order": "volume24hr",
-         "ascending": "false", "end_date_min": iso(min_end),
-         "end_date_max": iso(today_end)},
-        # 4-5 reach categories by series, without a volume floor, for the same
-        # reason as the Polymarket econ tag: mechanically resolving beats deep.
+        {**base, "_label": "kalshi-index-series", "order": "volume24hr",
+         "ascending": "false", "series_ticker": ",".join(KALSHI_INDEX_SERIES)},
         {**base, "_label": "kalshi-econ-series", "order": "volume24hr",
          "ascending": "false", "series_ticker": ",".join(KALSHI_ECON_SERIES)},
-        {**base, "_label": "kalshi-commodity-series", "order": "volume24hr",
-         "ascending": "false", "series_ticker": ",".join(KALSHI_COMMODITY_SERIES)},
     ]
 
 
