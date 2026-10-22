@@ -9073,3 +9073,9 @@ a sourced VIX or a larger n says otherwise.
 [0.10, 0.90] at record count toward the self-model's re-grade n. Deep
 tails test nothing, so record them only if they're cheap, and never cite
 the diluted category delta as validation.
+
+**Settled 2026-10-22 20:00Z (RETRO-20261022-2110):** the 4pm Dow 52,175
+rung `db9697b42d01` (own 0.90 vs mid 0.945) resolved Yes, dBrier +0.007.
+The self-model again priced more downside than the book did. The mid sat
+outside [0.10, 0.90], so this row is out-of-band and in-band n stays 4.
+No rule change.
