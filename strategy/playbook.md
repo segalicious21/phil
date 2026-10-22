@@ -8167,6 +8167,13 @@ to test, not yet a rule: on a SEALED-decision market (committee/jury
 announcement, outcome not knowable before the reveal), hold the prior
 instead of shading toward an unsourced late jump. Still no fade bet
 (n=5 << 15).**
+**n=6 (RETRO-20261022-1345): claims >=200k `e05a64a0a1dc`, gradual
+0.465->0.395 slide over ~13h on a liquid (OI ~1.3k) book, no catalyst
+found; I shaded 0.48->0.45, print landed 190-195k (No). Tally 4-for-6
+market right; gradual-drift split 3-for-3 market right, sudden-jump
+split 2-1 discount-right. Recording rule (not a bet rule): on a gradual
+unsourced drift on a liquid book, record at least halfway from my prior
+to the moved mid. Re-grade at n=10.**
 
 ## 2026-10-02 18:57Z update: one `outside-view-veto` and one `wide-spread-veto` row settled, post-count pair graded (FULL tick, RETRO-20261002-1857)
 
