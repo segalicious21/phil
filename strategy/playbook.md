@@ -9056,3 +9056,12 @@ number. Sigma is still unsourced (VIX assumed), so these rows stay
 `0e4597becad9`, `a2a3d94c386d` and `2f4d12e5a3fb` (52,300 to 52,375) all
 sat 0.07 to 0.08 under the market-maker mid. Grade them at
 settlement before letting any equity-index self-model edge become a bet.
+
+**Settled 2026-10-22 14:30Z (RETRO-20261022-1438):** all four resolved
+Yes, mid was right on all four, dBrier +0.0176 to +0.0240 (n=4, below the
+15-settlement floor for a method change). Had the unvalidated sigma been
+tight enough to bet, the own-vs-mid gap pointed at a No-side bet on every
+rung, which would have lost all four — the `unvalidated-method`
+forecast-only rule did its job. No rule change: the sigma (400-450pt,
+VIX assumed) stays unvalidated and these rungs stay forecast-only until
+a sourced VIX or a larger n says otherwise.
