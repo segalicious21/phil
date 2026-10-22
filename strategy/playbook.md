@@ -9034,3 +9034,18 @@ a liquid (OI > ~1k) mid. Write the chained number in the note, but don't
 lean on it. A lean beyond that needs a devigged book line from
 `core/odds.py` or a named injury or lineup fact the price predates.
 Re-grade at n=10.
+
+## 2026-10-22 03:20Z finding: KXDJI rungs settle on cash-hours Pyth, not futures
+
+The KXDJI-*10 rules settle on Pyth `Equity.Index.US30/USD`. Pyth's Hermes
+feed list (`hermes.pyth.network/v2/price_feeds?query=US30`) gives that
+feed a 0930-1600 America/New_York schedule, so a 10am ET rung settles on
+the cash Dow 30 minutes into the session. YM futures are only an input.
+Convert them to cash before modelling: subtract fair-value basis (Dec
+contract about +190pt in Oct 2026). The 00:54Z read hedged "cash-like vs
+futures-like" (0.81 vs 0.90). That ambiguity is closed: use the cash-like
+number. Sigma is still unsourced (VIX assumed), so these rows stay
+`unvalidated-method`, forecast-only. Rows `c380dd683d12`,
+`0e4597becad9`, `a2a3d94c386d` and `2f4d12e5a3fb` (52,300 to 52,375) all
+sat 0.07 to 0.08 under the market-maker mid. Grade them at
+settlement before letting any equity-index self-model edge become a bet.
