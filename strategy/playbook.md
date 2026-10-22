@@ -9065,3 +9065,11 @@ rung, which would have lost all four — the `unvalidated-method`
 forecast-only rule did its job. No rule change: the sigma (400-450pt,
 VIX assumed) stays unvalidated and these rungs stay forecast-only until
 a sourced VIX or a larger n says otherwise.
+
+**Counting rule, 2026-10-22 16:27Z (RETRO-20261022-1627):** 12 NDX
+12pm-EDT rungs settled No. Own and mid were both <= 0.04 on every rung
+(sum dBrier about -0.002), and score.py's equity-index delta fell from
++0.0199 (n=4) to +0.0049 (n=16) on dilution alone. Only rows with mid in
+[0.10, 0.90] at record count toward the self-model's re-grade n. Deep
+tails test nothing, so record them only if they're cheap, and never cite
+the diluted category delta as validation.
