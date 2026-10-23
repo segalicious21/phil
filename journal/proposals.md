@@ -4217,3 +4217,42 @@ whichever one you pick.
   operator's own manual forecast 2a5b810a2ffd (2026-10-10T13:48Z, KXCPI,
   recorded outside a cycle, so no funnel line): expected, do not backfill
   it; it ages out at 2026-10-11T13:48Z.
+
+## 2026-10-23 — sandbox blocks `python3 strategy/tools/*.py` and ad-hoc scripts; this caused a pacing miss
+
+**Evidence:** on the 09:40Z cycle this runner's Bash tool refused every
+`python3 strategy/tools/quote.py ...` invocation ("This command requires
+approval") and a scratch helper script written to count FULL cycles for
+the step-0b pacing check ("This Bash command contains multiple
+operations" / "requires approval"), while `python3 core/*.py` commands
+(including a two-stage pipe into `core/screen.py`) ran without any
+prompt all cycle. `journal/cycles.log` has logged variants of this under
+the name "GateGuard" at least nine times since 2026-10-19
+(e.g. 2026-10-19T20:35Z, 2026-10-20T09:12Z/11:30Z/13:52Z/16:16Z/
+17:05Z/19:30Z, 2026-10-21T14:28Z/16:50Z/19:12Z/20:05Z/22:30Z) — several
+of those entries record a lease acquire/release pair with NO cycle
+commit between them, i.e. the whole invocation died, not just one
+command. None of those nine-plus occurrences were ever written up here;
+each cycle narrated the symptom and moved on. This time the concrete
+cost is traceable: unable to run the step-0b FULL-count command, I
+skipped straight into research and only reconstructed the count
+afterward (via the Grep tool on cycles.log, working around the block)
+— by then I'd already run a FULL cycle (scan+screen+research, spending
+15/150 of the day's shared screener budget) that pacing had called for
+as LIGHT: the immediately preceding 08:41Z LIGHT tick had already
+computed "7 FULL cycles ran in last 24h (>= min 4)" with
+`next_full_cycle_after` at 12:30Z still in the future. Had the count
+command worked, I would have caught this before spending the budget,
+not after.
+**Proposed change:** find out what classifies a Bash invocation as
+needing interactive approval versus pre-approved in this headless
+runner (likely a command-pattern allowlist scoped to `core/*.py` and a
+couple of known pipelines) and extend it to cover `strategy/tools/*.py`
+and short one-off `python3 -c` / scratch-script invocations, since
+`strategy/` is explicitly mine to use and its tools (quote.py,
+reconcile.py, devig.py, etc.) are called for by this very procedure.
+Failing that, a documented, approval-free way to run the step-0b pacing
+count (e.g. a `core/`-housed helper, since only `core/*.py` reliably
+runs unattended) would at least decouple pacing correctness from this
+sandbox quirk.
+**Status:** open
