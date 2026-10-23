@@ -262,7 +262,12 @@ Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for t
           --mcp-config "$STORE/.mcp.json")
     DISALLOWED+=("Read($STORE/.mcp.json)")
   fi
-  CMD+=(--disallowedTools "${DISALLOWED[@]}" --permission-mode acceptEdits)
+  # No user-level settings (operator, 2026-10-23): the operator's own hooks
+  # and plugins added ~88 KB of context after this prompt, and Sonnet LIGHT
+  # ticks read the cycle as "just context" and asked what to do (cycles
+  # 34-53 on 2026-10-22/23). Project and local settings still load.
+  CMD+=(--disallowedTools "${DISALLOWED[@]}" --permission-mode acceptEdits
+        --setting-sources project,local)
 
   # PHIL_PUSH_BY_LOOP tells CYCLE.md step 9 to commit but not push — the push
   # happens below, in this shell. GIT_TERMINAL_PROMPT/GIT_ASKPASS make any
