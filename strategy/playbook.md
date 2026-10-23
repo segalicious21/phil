@@ -9012,6 +9012,12 @@ may be contract choice, not mispricing. **Ruling:** stays
 reference contract and price it centred on, and the vol source (an
 unsourced sd is allowed but must say so). Re-grade at 5 decisions; a
 bettable class needs own closer on at least 4 of 5 with a sourced vol.
+**Re-grade at 5 (RETRO-20261023-2115):** Brent Oct 23 weekly (settled
+111.60; live rows `aecf2f5b8fd5`, `c102f6a66549`, `2495916151cf` sum
+-0.063, own closer) and Gold Oct 23 weekly (settled 3995.97;
+`9d359074dacb`, `3a1c3d5b526e` sum -0.179, own closer on a -4% week with
+an unsourced 22% vol). **Tally 5 decisions, 3-2. Bar not met.** Stays
+forecast-only. Next re-grade at 8 decisions, same sourced-vol requirement.
 
 **Reference-gap finding (2026-10-18 08:34Z FULL):** `KXWTI-*` daily rules
 name the contract (Oct 19 event: "December 2026 contract"). Headline
@@ -9026,6 +9032,13 @@ close. If the rules name no contract, an unexplained gap to the ladder
 of about one calendar spread is a reason to sit at the ladder, not
 against it. The 10-16 Brent "own closer" win (above) may have come from
 this mismatch working in my favour; don't count it as method skill.
+**Brent re-test (RETRO-20261023-2115):** Oct 23 settled 111.60, above
+both the headline centre (~109.9) and the ladder (~106.5) that
+cd1419996b20 was revised down to. Both Brent events so far settled on
+the headline side. If a third `KXBRENTW` event does the same on an
+unexplained gap, drop the sit-at-ladder clause for Brent. If it settles
+on the ladder side, the clause stands. WTI is unaffected (its rules name
+the contract).
 
 ## RETRO-20261020-0415 tally: Kalshi sports series-state / prop market-agrees rows
 
