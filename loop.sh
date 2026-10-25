@@ -141,13 +141,17 @@ for i in $(seq 1 "$CYCLES"); do
   # would flip it, and the error would go the wrong way.
   MODEL=claude-opus-5-5
   MODEL_WHY="tick may run FULL"
-  if python3 -I -X utf8 - <<'PY'
+  # The same numbers go into the runner note below (operator, 2026-10-25): the session may not run its own
+  # scripts here (K2), so a step-0b count it writes itself is blocked and it ran FULL ticks pacing called
+  # LIGHT (journal/proposals.md 2026-10-23). Reporting the count adds no execution rights.
+  if PACE="$(python3 -I -X utf8 - <<'PY'
 import datetime as dt, json, re, sys
 now = dt.datetime.now(dt.timezone.utc)
 iso = lambda t: dt.datetime.fromisoformat(t.replace("Z", "+00:00"))
 s = json.load(open("strategy/schedule.json"))
 hold = s.get("next_full_cycle_after")
 if not hold or iso(hold) <= now:
+    print(f"next_full_cycle_after={hold or 'unset'} is not in the future -> step 0b: FULL")
     sys.exit(1)
 # Count the tick type stated right after the cash figure, "cash $952.98
 # (FULL cycle, ...". A LIGHT line can quote "(FULL" further along, and
@@ -163,9 +167,12 @@ for line in open("journal/cycles.log"):
             full += 1
     except ValueError:
         continue
-sys.exit(0 if full >= s["min_full_cycles_per_day"] else 1)
+light = full >= s["min_full_cycles_per_day"]
+print(f"next_full_cycle_after={hold} is in the future; FULL cycles logged in the last 24h={full}; "
+      f"min_full_cycles_per_day={s['min_full_cycles_per_day']} -> step 0b: {'LIGHT' if light else 'FULL'}")
+sys.exit(0 if light else 1)
 PY
-  then
+)"; then
     MODEL=claude-sonnet-5
     MODEL_WHY="LIGHT tick: pacing hold with the daily FULL minimum met"
   fi
@@ -223,7 +230,9 @@ PY
   # (this point is only reached after the lease was acquired above).
   PROMPT="$PROMPT
 
-Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for this session. Do not read the environment to check them."
+Runner note (loop.sh): PHIL_LEASE=acquired and PHIL_PUSH_BY_LOOP=1 are set for this session. Do not read the environment to check them.
+
+Runner pacing (loop.sh, read after this tick's sync with the step-0b rule): ${PACE:-unavailable - count it with the Grep tool on journal/cycles.log}. Use it as step 0b's answer instead of writing a script to count; step 0's collision guard still applies."
   CMD=(claude -p "$PROMPT" --model "$MODEL"
        --allowedTools "Read" "Glob" "Grep" "WebSearch" "WebFetch"
          "Edit" "Write" "Task"
