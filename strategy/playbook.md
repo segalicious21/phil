@@ -9092,3 +9092,15 @@ rung `db9697b42d01` (own 0.90 vs mid 0.945) resolved Yes, dBrier +0.007.
 The self-model again priced more downside than the book did. The mid sat
 outside [0.10, 0.90], so this row is out-of-band and in-band n stays 4.
 No rule change.
+
+**Settled 2026-10-26 20:00Z (RETRO-20261026-2110):** 7 Oct-26 4pm
+rungs settled, NDX 28,700-29,050 and SPX 7,655 Yes, and the SPX
+7,625-7,650 band No. All 7 are in-band. Own dBrier was +0.027 per row
+vs the mid, and own beat the mid on only 2 of 7. In-band n is now 11
+(about 3 sessions), and the mid won 9. Every miss went the same way:
+the VIX-sigma model priced more downside than the book. Rule from here
+on: when the self-model sits below the book on an up-rung and nothing
+independent backs the gap (a sourced sigma, or news after the book last
+moved), record est-prob near the mid. Put the raw model number in the
+note so the method still gets graded. Rows stay `unvalidated-method`,
+forecast-only.
