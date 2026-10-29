@@ -8174,6 +8174,24 @@ market right; gradual-drift split 3-for-3 market right, sudden-jump
 split 2-1 discount-right. Recording rule (not a bet rule): on a gradual
 unsourced drift on a liquid book, record at least halfway from my prior
 to the moved mid. Re-grade at n=10.**
+**n=8 (RETRO-20261029-1310): PCE T0.3 (gradual 0.325->0.17, no catalyst,
+No) and claims wk Oct 24 (sudden 0.345->0.125 on ~1k volume ~19h before
+the print, no catalyst, No). Both market right. Tally 6-for-8 market right.
+Gradual-drift split 4-for-4 market right. Sudden-jump split 2-2: the
+market-right ones (Haiku, claims) had an event knowable before the reveal,
+and the discount-right ones (Opus, Nobel) were sealed decisions.**
+
+**Claims-ladder recording rule (RETRO-20261029-1310, 2 events).** Both
+settled `KXJOBLESSCLAIMS` events (wk Oct 17, wk Oct 24) printed in
+[190k, 195k) and [180k, 195k), below my consensus/4-week-average
+centre (196-197k). The ladder was right both times; the wk Oct 24 rows
+summed dBrier +0.207. Halfway-to-mid shading still lost. Until claims
+rows are re-graded at 4 events: when an unsourced-sd claims model's
+centre sits above the ladder median, record every rung within 0.03 of a
+liquid (OI > ~500) mid. Write the raw model number in the note. A lean
+beyond that needs a published consensus or a state-level data point
+that postdates the book's last move, cited in the note. Forecast-only,
+as before.
 
 ## 2026-10-02 18:57Z update: one `outside-view-veto` and one `wide-spread-veto` row settled, post-count pair graded (FULL tick, RETRO-20261002-1857)
 
