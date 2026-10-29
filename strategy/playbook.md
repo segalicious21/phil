@@ -8998,6 +8998,13 @@ component the nowcast does not carry (AAA gasoline, Manheim, a bank
 tracker with a published number), and the note must cite it. Re-grade at
 the Oct CPI print.
 
+**Extended to GDP ladders (RETRO-20261029-1535).** Q3 GDP advance
+(`KXGDP-26OCT30`, printed in (3.0, 3.5]) settled 13 rows. The 5 rows that
+sat 0.03-0.05 off the mid lost Brier every time (row sum +0.138). The 8
+rows within 0.02 of the mid summed +0.013. Same rule for a liquid
+(OI > ~10k) GDP ladder: when GDPNow / a nowcast is the only reason to
+sit away from the mid, record within 0.02 of it.
+
 ## RETRO-20261017-0125 tally: Kalshi commodity close ladders (WTI daily, Brent weekly)
 
 Kalshi close-above ladders on oil (`KXWTI-*`, `KXBRENTW-*`) are one
