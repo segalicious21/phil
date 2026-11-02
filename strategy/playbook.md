@@ -8719,6 +8719,10 @@ one riding projection stays barred.
   regime-weighted rows do not beat the 365d-only figure in summed dBrier,
   the recent-regime weight is capped at 0.5 for bets. Until then the bet
   side is unchanged.
+  **Closed RETRO-20261103-0010:** 38f9c08d4804 lost (week ran >=7, the
+  365d-only side). Family bets 2W/3L -$13.13. The 3-week test cannot run
+  on the Kalshi venue (no USGS series), so the cap applies now: any
+  future USGS-style count bet uses a recent-regime weight of at most 0.5.
 - **Validated-feed bets 0/3 since 09-30** (9a2944acc280, d5cfa982fa21,
   9b7c41da79ac; -$15). Each loss has its own named cause, and both are
   now covered by a rule: two mb->mww downgrades took the USGS '7' count
