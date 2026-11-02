@@ -9133,3 +9133,39 @@ independent backs the gap (a sourced sigma, or news after the book last
 moved), record est-prob near the mid. Put the raw model number in the
 note so the method still gets graded. Rows stay `unvalidated-method`,
 forecast-only.
+
+## 2026-11-02 19:55Z update: 18 legacy veto rows from the 15:04Z bulk settlement graded (FULL tick, RETRO-20261102-1955)
+
+| Row | Side | Edge | CF pnl |
+|---|---|---|---|
+| Berlin >=163 seats (`ccc9f72c326e`, OVV) | No | +0.360 | +7.82 |
+| Lula wins Brazil (`9c5be5868fda`, OVV) | Yes | +0.080 | +7.82 |
+| F. Bolsonaro wins Brazil (`c67d8b6559ef`, OVV) | No | +0.168 | +7.76 |
+| Saudi vs Yemen (`488609de0812`, OVV) | No | +0.110 | -5.00 |
+| China CPI bracket (`fc10ca9ae3bb`, OVV) | No | +0.110 | -5.00 |
+| China Q3 GDP bracket (`2ae729db32f5`, OVV) | No | +0.190 | -5.00 |
+| MrBeast 207-x (`ed4024a9d4c7`, OVV) | No | +0.190 | +11.13 |
+| MrBeast 207-x (`73c80f107bab`, OVV) | No | +0.330 | +15.83 |
+| Musk 90-114 tweets (`a453b674acf5`, OVV) | No | +0.235 | -5.00 |
+| MrBeast 207-x (`fc349be56b8a`, OVV) | Yes | +0.180 | -5.00 |
+| MrBeast 215-x (`d72d87152a63`, OVV) | No | +0.180 | -5.00 |
+| Saudi vs Yemen (`ecca0a61ca2c`, WSV) | No | -0.330 | -5.00 |
+| Saudi vs Yemen (`dfd46d67ea74`, WSV) | No | +0.050 | -5.00 |
+| Dem Senate odds 64-66% (`8ab87e366ec4`, WSV) | No | +0.210 | +1.58 |
+| Dem Senate odds 60-62% (`88d1b2dd9235`, WSV) | Yes | -0.099 | +7.53 |
+| UMich 46.x (`2f8b20bc6692`, WSV) | Yes | -0.050 | +3.06 |
+| UMich 43.x (`d96ac3d2c8b9`, WSV) | No | -0.070 | +2.35 |
+| MrBeast 215-x (`4b593e57d185`, WSV) | Yes | +0.150 | +13.52 |
+
+Mechanical ledger (`core/counterfactual.py ledger`): OVV 257 rows, 249
+trd, 107W/142L, +$201.12, dBrier +0.0227, held-out +$191.05; side split
+No +$143.06 (168 trd), Yes +$58.06 (81 trd). WSV 87 rows, 74 trd, 13
+refused, 40W/34L, -$51.73, dBrier -0.0096; side split No -$85.15 (43
+trd), Yes +$33.42 (31 trd). Tool totals, not hand re-sums.
+
+Ruling: no boundary change. The OVV batch is +$20.36, and +$15.96 of it
+comes from one MrBeast video (5 rows, one event). Four of the 7 WSV rows
+had negative ask-edge, so the veto was not the binding gate on them.
+Process rule: a bulk forecast settlement is graded in the same tick.
+The tool is `core/counterfactual.py`, not `strategy/tools/`, and it runs
+in the operator-machine session.
