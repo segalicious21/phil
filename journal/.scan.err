@@ -1,0 +1,4 @@
+scan: discovery.py supplied 2 queries
+scan: query 'kalshi-index-series' -> 235 candidates
+scan: query 'kalshi-econ-series' -> 29 candidates
+scan: 264 candidates total within 336.0h
