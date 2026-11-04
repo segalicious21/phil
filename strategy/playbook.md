@@ -9134,6 +9134,18 @@ moved), record est-prob near the mid. Put the raw model number in the
 note so the method still gets graded. Rows stay `unvalidated-method`,
 forecast-only.
 
+**Settled 2026-11-04 21:00Z (RETRO-20261104-2230):** 3 NDX Nov-4 4pm
+rungs (`b7e9108dfd86`, `e9019df2073a`, `48dd2d78d05c`, T28860-T28910)
+settled No. Own sat +0.075 to +0.085 ABOVE the mid after the
+post-midterm rally, and the mid won all 3 (row sum +0.179). In-band n
+is 14, mid closer on 12. The spot was inferred from sibling Kalshi
+rungs, so the gap was the model's sigma and drift on the book's own
+centre. **Rule, tightened:** the near-mid rule applies in both
+directions (model above or below the book) and "near" means **within
+0.02 of the mid**. Only a sourced spot quote taken after the book last
+moved, or a sourced sigma, counts as independent backing. A spot read
+off sibling rungs never does.
+
 ## 2026-11-02 19:55Z update: 18 legacy veto rows from the 15:04Z bulk settlement graded (FULL tick, RETRO-20261102-1955)
 
 | Row | Side | Edge | CF pnl |
