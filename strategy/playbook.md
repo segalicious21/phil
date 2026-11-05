@@ -8193,6 +8193,21 @@ beyond that needs a published consensus or a state-level data point
 that postdates the book's last move, cited in the note. Forecast-only,
 as before.
 
+**Event 3 (RETRO-20261105-1410): wk Oct 31 printed in [185k, 190k).**
+The ladder median sat near 197k (195k mid 0.675, 200k mid 0.34), and the
+print came in below it. All 9 rows (5 from Oct 29, 4 from Nov 3) leaned
+below the mid. All 9 beat the mid, with summed dBrier -0.307. The Oct 29
+rows leaned 0.03-0.09 below the mid and earned -0.209. The Nov 3 rows were
+shaded back within 0.03 of a mid that had drifted up, and earned -0.098.
+Tally: the print fell below my model centre in 3 of 3 events. This time
+the ladder was also too high, so leaning low beat it. The Nov 3 shading
+toward a rising mid that had no catalyst gave back about half the gain.
+The rule stands until event 4, with one clarification. The 0.03 band
+binds only when the model centre sits ABOVE the ladder median. A centre
+at or below the median may lean as the model says, with the raw number
+in the note. A mid drifting up with no sourced catalyst is no reason to
+shade a below-median row back toward it.
+
 ## 2026-10-02 18:57Z update: one `outside-view-veto` and one `wide-spread-veto` row settled, post-count pair graded (FULL tick, RETRO-20261002-1857)
 
 | Row | own/mkt | Side | Edge | Result | CF pnl |
