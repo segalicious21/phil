@@ -2299,3 +2299,4 @@ scan: 16 candidates in 48h window, all soccer (FCSB-Farul Romania SuperLiga, Yor
 2026-11-10T15:22:49Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT tick: paced per schedule.json, 2 open positions unchanged, both unresolvable Polymarket ids on Kalshi venue)
 2026-11-10T16:09:33Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT tick per schedule.json pacing; 2 open Polymarket positions unfetchable on Kalshi venue, expected)
 2026-11-10T16:56:02Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT tick, pacing: next_full_cycle_after 2026-11-10T19:00:00Z; 2 legacy Polymarket positions open, unresolvable on Kalshi venue)
+2026-11-10T17:42:11Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT: pacing + collision guard pass)
