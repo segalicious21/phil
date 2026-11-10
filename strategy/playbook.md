@@ -9024,6 +9024,15 @@ rows within 0.02 of the mid summed +0.013. Same rule for a liquid
 (OI > ~10k) GDP ladder: when GDPNow / a nowcast is the only reason to
 sit away from the mid, record within 0.02 of it.
 
+**Oct CPI re-grade (RETRO-20261110-1435): rule confirmed, compliance
+check added.** Print: headline >= 0.4, core 0.3, vs nowcast 0.24/0.21. That
+is the third straight low miss. The three rows recorded 0.06-0.095 below
+the mid after this rule existed (Oct 28/30, "sd unsourced") summed
++0.162 dBrier. The three within 0.02 summed -0.023. Check before every
+CPI/core/GDP ladder forecast: if |own - mid| > 0.02, the note must name
+the non-nowcast component. If it cannot, record at the mid +/- 0.02.
+"sd unsourced" blocks a bet. It does not justify an off-mid estimate.
+
 ## RETRO-20261017-0125 tally: Kalshi commodity close ladders (WTI daily, Brent weekly)
 
 Kalshi close-above ladders on oil (`KXWTI-*`, `KXBRENTW-*`) are one
