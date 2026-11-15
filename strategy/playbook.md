@@ -8208,6 +8208,19 @@ at or below the median may lean as the model says, with the raw number
 in the note. A mid drifting up with no sourced catalyst is no reason to
 shade a below-median row back toward it.
 
+**Event 4 (RETRO-20261115-0730): wk Nov 7 printed in [200k, 205k).**
+My model centre was 189.5k, about 3k below the ladder median (~192.5k), so
+the event-3 clarification let it lean. The print came in about 12k above
+the centre. Five of the six rows lost to the mid. Summed dBrier was
++0.463, the worst claims event so far. Over events 2-4 the summed dBrier is
++0.207 - 0.307 + 0.463 = +0.363, so the mid has beaten me. My
+unsourced 9k sd is too tight for a week-to-week jump this size.
+**Rule (supersedes the event-3 clarification):** whichever side of the
+median the model centre sits, record every claims rung within 0.03 of
+its mid. Write the raw model number in the note. A lean beyond 0.03 needs
+a published consensus, or a state-level data point that postdates the
+book's last move, cited in the note. Forecast-only. Re-grade at event 8.
+
 ## 2026-10-02 18:57Z update: one `outside-view-veto` and one `wide-spread-veto` row settled, post-count pair graded (FULL tick, RETRO-20261002-1857)
 
 | Row | own/mkt | Side | Edge | Result | CF pnl |
