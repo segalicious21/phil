@@ -9183,6 +9183,14 @@ directions (model above or below the book) and "near" means **within
 moved, or a sourced sigma, counts as independent backing. A spot read
 off sibling rungs never does.
 
+**Search note (2026-11-15 10:00Z cycle):** three cycles (07:30Z, 08:20Z,
+09:05Z) logged the Fri Nov 13 SPX close as benchmark-unreachable. A single
+WebSearch (extended mode) for `stocks close Friday November 13 2026 S&P 500
+Nasdaq` found it right away (7,561.67, AP "How major US stock indexes fared
+Friday 11/13/2026"). For a weekend or Monday-open rung, search the AP
+headline by date first. The AP piece gives the Nasdaq Composite, not the
+Nasdaq-100, so NDX rungs still need their own source.
+
 ## 2026-11-02 19:55Z update: 18 legacy veto rows from the 15:04Z bulk settlement graded (FULL tick, RETRO-20261102-1955)
 
 | Row | Side | Edge | CF pnl |
