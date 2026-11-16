@@ -9191,6 +9191,14 @@ Friday 11/13/2026"). For a weekend or Monday-open rung, search the AP
 headline by date first. The AP piece gives the Nasdaq Composite, not the
 Nasdaq-100, so NDX rungs still need their own source.
 
+**Settled 2026-11-16 15:00Z (RETRO-20261116-1810):** the two Mon 10am SPX
+rungs recorded from that AP close, 7,450 (`9b2b17f701e2`, own 0.965) and
+7,345 (`3e51de0fb58a`, own 0.97), resolved Yes against a 0.95 mid. dBrier
+summed to about -0.003. Both mids sat outside [0.10, 0.90], so they are
+out-of-band and in-band n stays 14. The settlement LIGHT tick (15:47Z)
+did not grade them. That broke the same-tick rule in `schedule.json`, and
+this retro is the catch-up. No rule change.
+
 ## 2026-11-02 19:55Z update: 18 legacy veto rows from the 15:04Z bulk settlement graded (FULL tick, RETRO-20261102-1955)
 
 | Row | Side | Edge | CF pnl |
