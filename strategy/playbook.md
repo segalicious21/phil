@@ -9199,6 +9199,15 @@ out-of-band and in-band n stays 14. The settlement LIGHT tick (15:47Z)
 did not grade them. That broke the same-tick rule in `schedule.json`, and
 this retro is the catch-up. No rule change.
 
+**Settled 2026-11-17 00:01Z (RETRO-20261117-0020):** the Mon 4pm SPX rung
+7,435 (`cd4b5d97f62b`, own 0.93, mid 0.935) resolved No. SPX held above
+7,450 at 10am, so the whole fall of more than 1.7% from the Fri close came
+inside the Monday session. That is about a 1.6-sigma move on the assumed
+1.05% sd. dBrier -0.0093 (own slightly below the mid, so the shading
+helped). Out-of-band (mid 0.935), so in-band n stays 14. One tail miss is
+not evidence that the sd is too narrow: the 10am rungs on the same day
+came nowhere near. No rule change. The rungs stay forecast-only.
+
 ## 2026-11-02 19:55Z update: 18 legacy veto rows from the 15:04Z bulk settlement graded (FULL tick, RETRO-20261102-1955)
 
 | Row | Side | Edge | CF pnl |
