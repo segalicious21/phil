@@ -9208,6 +9208,17 @@ helped). Out-of-band (mid 0.935), so in-band n stays 14. One tail miss is
 not evidence that the sd is too narrow: the 10am rungs on the same day
 came nowhere near. No rule change. The rungs stay forecast-only.
 
+**Settled 2026-11-17 15:00Z (RETRO-20261117-1520):** three Tue 10am SPX
+rungs. 7,375 (`c1209aeaca01`, own 0.765, mid 0.77) and 7,400
+(`045b1b81a304`, own 0.66, mid 0.675) resolved Yes. 7,500
+(`efab5c7fbd8a`, own = mid 0.085) resolved No. dBrier was +0.002, +0.010
+and 0. The two in-band rows bring in-band n to 16, and the mid was closer
+on 14. The 7,400 raw model said 0.51, and recording it would have cost
+about +0.13 against the mid. The near-mid rule saved that. The raw model
+sat below the book again, as on Oct 22 and Oct 26 (Nov 4 missed above
+it). No rule change. The rungs stay
+forecast-only, within 0.02 of the mid.
+
 ## 2026-11-02 19:55Z update: 18 legacy veto rows from the 15:04Z bulk settlement graded (FULL tick, RETRO-20261102-1955)
 
 | Row | Side | Edge | CF pnl |
