@@ -2532,3 +2532,4 @@ scan: 16 candidates in 48h window, all soccer (FCSB-Farul Romania SuperLiga, Yor
 2026-11-22T14:49:29Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT, 2 open Polymarket positions unresolvable on Kalshi venue)
 2026-11-22T15:35:32Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT, 2 open Polymarket positions unresolvable on Kalshi venue)
 2026-11-22T17:07:06Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT, 2 open Polymarket positions unresolvable on Kalshi venue)
+2026-11-22T17:53:18Z cycle done: settled 0, placed 0, cash $968.06 (LIGHT; resolve.py: 64 ledger rows checked, 0 Kalshi-settleable, 2 open are legacy Polymarket ids per venue note; open-position monitor: no actionable change)
